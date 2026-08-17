@@ -12,6 +12,7 @@ skills/
 │   ├── references/     # 可选：参考文档
 │   └── assets/         # 可选：模板、示例等资源
 ├── CONTRIBUTING.md
+├── AGENTS.md         # 面向 AI 助手的仓库工作约定
 └── README.md
 ```
 
