@@ -1,20 +1,23 @@
 # Skills
 
-可复用的 Agent Skills 集合。每个技能是一个独立目录，包含 `SKILL.md` 指令文件及其辅助资源（脚本、模板、参考文档等）。
+可复用的 Agent Skills 集合。每个技能是 `skills/` 下的一个独立目录，包含 `SKILL.md` 指令文件及其辅助资源（脚本、模板、参考文档等）。
 
 ## 目录结构
 
 ```
-skills/
-├── <skill-name>/
-│   ├── SKILL.md        # 技能定义（必填）：YAML frontmatter + 指令正文
-│   ├── scripts/        # 可选：可执行脚本
-│   ├── references/     # 可选：参考文档
-│   └── assets/         # 可选：模板、示例等资源
+<repo-root>/
+├── skills/
+│   └── <skill-name>/
+│       ├── SKILL.md        # 技能定义（必填）：YAML frontmatter + 指令正文
+│       ├── scripts/        # 可选：可执行脚本
+│       ├── references/     # 可选：参考文档
+│       └── assets/         # 可选：模板、示例等资源
 ├── CONTRIBUTING.md
-├── AGENTS.md         # 面向 AI 助手的仓库工作约定
+├── AGENTS.md               # 面向 AI 助手的仓库工作约定
 └── README.md
 ```
+
+技能统一放在 `skills/` 下，这是 [skills CLI](https://github.com/vercel-labs/skills#skill-discovery)（`npx skills`）等工具的标准发现位置，支持 `skills/<name>/SKILL.md` 及最多两层分类（`skills/<category>/<name>/SKILL.md`）。
 
 ## 技能规范
 
@@ -39,11 +42,23 @@ description: 一句话描述技能的用途和触发场景
 
 ## 使用方式
 
+### 通过 skills CLI 安装（推荐）
+
+```bash
+# 列出本仓库的技能
+npx skills add <owner>/skills --list
+
+# 安装指定技能
+npx skills add <owner>/skills --skill <skill-name>
+```
+
+### 手动链接
+
 将技能目录复制或链接到 Agent 的技能加载路径（如 Claude Code 的 `~/.claude/skills/` 或项目的 `.claude/skills/`）：
 
 ```bash
 # 示例：链接单个技能
-ln -s "$(pwd)/<skill-name>" ~/.claude/skills/<skill-name>
+ln -s "$(pwd)/skills/<skill-name>" ~/.claude/skills/<skill-name>
 ```
 
 ## 贡献

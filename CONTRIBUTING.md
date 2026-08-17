@@ -4,7 +4,7 @@
 
 ## 添加新技能
 
-1. 在仓库根目录创建技能目录，使用 kebab-case 命名：`<skill-name>/`
+1. 在 `skills/` 目录下创建技能目录，使用 kebab-case 命名：`skills/<skill-name>/`
 2. 目录内必须包含 `SKILL.md`，且带有合法的 YAML frontmatter：
 
    ```markdown

@@ -4,15 +4,17 @@
 
 ## 仓库概述
 
-这是一个 **Agent Skills 集合**仓库。每个技能是一个独立目录，包含 `SKILL.md` 指令文件及可选的辅助资源（脚本、参考文档、模板等）。
+这是一个 **Agent Skills 集合**仓库。每个技能是 `skills/` 下的一个独立目录，包含 `SKILL.md` 指令文件及可选的辅助资源（脚本、参考文档、模板等）。
 
 ```
-<skill-name>/
+skills/<skill-name>/
 ├── SKILL.md        # 技能定义（必填）：YAML frontmatter + 指令正文
 ├── scripts/        # 可选：可执行脚本
 ├── references/     # 可选：参考文档（按需加载，避免占用上下文）
 └── assets/         # 可选：模板、示例等资源
 ```
+
+技能必须放在 `skills/` 下：这是 skills CLI（`npx skills`）等工具的标准发现位置，支持 `skills/<name>/SKILL.md` 及最多两层分类（`skills/<category>/<name>/SKILL.md`）。不要在仓库根目录直接放置技能目录。
 
 ## 核心规范
 
@@ -41,7 +43,7 @@ description: 一句话描述技能的用途和触发场景
 
 ## 添加新技能的流程
 
-1. 创建 kebab-case 目录 `<skill-name>/`
+1. 在 `skills/` 下创建 kebab-case 目录 `skills/<skill-name>/`（分类布局用 `skills/<category>/<skill-name>/`）
 2. 编写 `SKILL.md`（frontmatter + 指令正文）
 3. 按需添加 `scripts/`、`references/`、`assets/`
 4. 自检清单：
