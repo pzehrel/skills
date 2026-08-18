@@ -1,6 +1,7 @@
 ---
 name: parallel-agent-dispatch
 description: 并行派发独立开发任务。当用户下达开发、修复、重构等代码任务，且需要多 session 并行推进或不想受当前 checkout 状态影响时使用；自动在隔离的分支和 worktree 命名空间中完成开发并收束成果，任务值得并行时才扇出多 Agent，各任务互不冲突。合入主分支需用户明确下令。
+license: MIT
 metadata:
   repository: https://github.com/pzehrel/skills
 ---
