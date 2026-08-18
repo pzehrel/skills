@@ -1,44 +1,17 @@
 # Skills
 
-可复用的 Agent Skills 集合。每个技能是 `skills/` 下的一个独立目录，包含 `SKILL.md` 指令文件及其辅助资源（脚本、模板、参考文档等）。
+[![skills.sh](https://skills.sh/b/pzehrel/skills)](https://skills.sh/pzehrel/skills)
 
-## 目录结构
+自用的 Agent Skills 集合。每个技能是 `skills/` 下的一个独立目录，包含 `SKILL.md` 指令文件及其辅助资源（脚本、模板、参考文档等）。
 
 ```
-<repo-root>/
-├── skills/
-│   └── <skill-name>/
-│       ├── SKILL.md        # 技能定义（必填）：YAML frontmatter + 指令正文
-│       ├── scripts/        # 可选：可执行脚本
-│       ├── references/     # 可选：参考文档
-│       └── assets/         # 可选：模板、示例等资源
-├── CONTRIBUTING.md
-├── AGENTS.md               # 面向 AI 助手的仓库工作约定
-└── README.md
+skills/
+└── <skill-name>/
+    ├── SKILL.md        # 技能定义：YAML frontmatter + 指令正文
+    ├── scripts/        # 可选：可执行脚本
+    ├── references/     # 可选：参考文档
+    └── assets/         # 可选：模板、示例等资源
 ```
-
-技能统一放在 `skills/` 下，这是 [skills CLI](https://github.com/vercel-labs/skills#skill-discovery)（`npx skills`）等工具的标准发现位置，支持 `skills/<name>/SKILL.md` 及最多两层分类（`skills/<category>/<name>/SKILL.md`）。
-
-## 技能规范
-
-每个技能目录下的 `SKILL.md` 必须包含 YAML frontmatter：
-
-```markdown
----
-name: skill-name          # 与目录名一致，kebab-case
-description: 一句话描述技能的用途和触发场景
----
-
-# Skill Name
-
-具体的任务指令、工作流程、注意事项……
-```
-
-编写要点：
-
-- **name**：小写字母、数字、连字符，与目录名一致。
-- **description**：清晰说明"做什么"和"什么时候用"，这是 Agent 选择技能的主要依据。
-- **正文**：给出具体、可执行的操作步骤；保持精简，把长篇参考材料拆到 `references/` 中按需加载。
 
 ## 使用方式
 
@@ -46,10 +19,25 @@ description: 一句话描述技能的用途和触发场景
 
 ```bash
 # 列出本仓库的技能
-npx skills add <owner>/skills --list
+npx skills add pzehrel/skills --list
 
 # 安装指定技能
-npx skills add <owner>/skills --skill <skill-name>
+npx skills add pzehrel/skills --skill <skill-name>
+```
+
+### 通过 gh CLI 安装
+
+GitHub CLI（v2.97+）内置了 `gh skill` 命令（preview 阶段）：
+
+```bash
+# 预览技能内容
+gh skill preview pzehrel/skills <skill-name>
+
+# 安装指定技能
+gh skill install pzehrel/skills <skill-name>
+
+# 列出已安装的技能
+gh skill list
 ```
 
 ### 手动链接
@@ -60,10 +48,6 @@ npx skills add <owner>/skills --skill <skill-name>
 # 示例：链接单个技能
 ln -s "$(pwd)/skills/<skill-name>" ~/.claude/skills/<skill-name>
 ```
-
-## 贡献
-
-欢迎提交新技能或改进现有技能，请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 许可证
 
