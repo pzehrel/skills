@@ -1,6 +1,6 @@
 # 安全盘点与清理规程
 
-本文件是 `parallel-agent-dispatch` 的配套参考，定义 worktree 创建回读、四项 NUL 安全盘点、子资源删除和清零验证的完整命令与判定规则。SKILL.md 中所有"按 safety-inventory 规程执行"的引用均指向本文件。
+本文件是 `subagents-develop` 的配套参考，定义 worktree 创建回读、四项 NUL 安全盘点、子资源删除和清零验证的完整命令与判定规则。SKILL.md 中所有"按 safety-inventory 规程执行"的引用均指向本文件。
 
 ## 通用执行规则
 

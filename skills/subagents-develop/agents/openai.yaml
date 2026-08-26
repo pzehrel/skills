@@ -1,7 +1,7 @@
 interface:
   display_name: "并行 Agent 任务派发"
   short_description: "只管派发任务，多 session 命名空间隔离，自主拆解并管理父子分支、worktree 及合并后回收"
-  default_prompt: "使用 $parallel-agent-dispatch 派发并行开发任务（只管发布任务，无需关心当前代码状态），并在我明确命令合入主分支后清理本次父子分支和 worktree。"
+  default_prompt: "使用 $subagents-develop 派发并行开发任务（只管发布任务，无需关心当前代码状态），并在我明确命令合入主分支后清理本次父子分支和 worktree。"
 
 policy:
   allow_implicit_invocation: true
