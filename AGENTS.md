@@ -13,8 +13,10 @@ skills/<skill-name>/
 ├── agents/
 │   └── openai.yaml    # 可选：英文配置值，并以相邻注释提供中文翻译
 ├── scripts/           # 可选：可执行脚本
-├── references/        # 可选：参考文档（按需加载，避免占用上下文）
-└── assets/            # 可选：模板、示例等资源
+├── references/        # 可选：参考文档；英文与中文文件成对维护
+│   ├── guide.md       # 英文参考文档
+│   └── guide.zh-CN.md # 中文参考文档
+└── assets/            # 可选：模板、示例等资源；其中的文本内容也须双语
 ```
 
 技能必须放在 `skills/` 下：这是 skills CLI（`npx skills`）等工具的标准发现位置，支持 `skills/<name>/SKILL.md` 及最多两层分类（`skills/<category>/<name>/SKILL.md`）。不要在仓库根目录直接放置技能目录。
@@ -43,7 +45,8 @@ Concrete task instructions...
 #### 通用核心
 
 - `SKILL.md` 是唯一的跨 Agent 权威执行说明；不得为不同 Agent 复制多份会独立演化的技能正文。
-- frontmatter 必须包含开放规范要求的 `name` 和 `description`。可按需使用规范字段 `license`、`compatibility` 和 `metadata`。
+- frontmatter 必须包含开放规范要求的 `name` 和 `description`。可按需使用当前目标 Agent 均能通过校验的 `license` 和 `metadata`。
+- Agent Skills 开放规范虽然定义了 `compatibility`，但当前 Codex `quick_validate` 尚不接受该字段；在兼容矩阵全部通过前，不在 frontmatter 使用它，环境要求改写在正文中。
 - `allowed-tools` 在开放规范中仍属实验字段；只有确认目标 Agent 支持且技能确实需要时才可使用，并在 `compatibility` 中记录限制。
 - 默认不添加厂商专属字段。确有必要时，只使用目标 Agent 官方文档明确支持的字段，并保证不支持该字段的 Agent 仍能加载和执行核心流程。
 - 厂商专属元数据只放在该厂商官方约定的位置。禁止为了目录对称而发明 `agents/claude.yaml`、`agents/cursor.yaml` 等非标准文件。
@@ -86,6 +89,15 @@ Concrete task instructions...
 - 两个版本的能力范围、触发条件、操作步骤、授权边界和安全约束必须保持语义一致。
 - 禁止在同一个 `SKILL.md` 中以中英文并排、交替段落等方式混排来代替独立文件。
 - 修改任一语言版本时，必须在同一次改动中同步更新另一版本；翻译应保留原意，不得自行扩大或缩小技能能力。
+
+技能目录内所有面向人或 Agent 阅读的文本内容都必须提供中英文双语，而不只限于 `SKILL.md`：
+
+- `references/` 中每份英文 Markdown 文档 `<name>.md` 都必须有对应的中文文档 `<name>.zh-CN.md`，反之亦然。
+- `assets/` 中的文本模板、示例、提示词或说明文档也使用相同的配对命名规则；图片、字体、二进制模板等不可翻译资源不需要复制。
+- 英文文件是默认加载的权威版本，中文文件是语义一致的完整翻译。两者的章节、步骤、表格、示例、授权边界和安全约束必须对应。
+- 英文 `SKILL.md` 及英文 reference 只链接英文资源；中文 `SKILL.zh-CN.md` 及中文 reference 在存在对应翻译时必须链接 `.zh-CN` 资源。
+- 修改任一 reference、文本 asset 或其他说明性文本时，必须在同一次改动中同步更新其语言配对文件。
+- 机器读取且不支持注释的结构化文件不复制本地化版本；其中面向用户的文字应在官方允许的位置提供双语，或在同目录的成对说明文档中解释。
 
 `agents/openai.yaml` 也必须提供中英文双语内容，但不创建独立的本地化 YAML 文件：
 
@@ -135,7 +147,7 @@ validate_skill(skill_dir)
 2. 编写英文版 `SKILL.md`（frontmatter + 指令正文）
 3. 编写独立中文版 `SKILL.zh-CN.md`，并确保与英文版语义一致
 4. 按兼容矩阵添加确有必要的厂商元数据或扩展字段
-5. 按需添加 `scripts/`、`references/`、`assets/`
+5. 按需添加 `scripts/`、`references/`、`assets/`，并为所有文本 reference 和文本 asset 创建中英文配对文件
 6. 自检清单：
    - [ ] `name` 与目录名一致
    - [ ] `description` 清晰说明用途与触发场景
@@ -144,6 +156,8 @@ validate_skill(skill_dir)
    - [ ] 无法实测的 Agent 已在变更说明中明确标记
    - [ ] `SKILL.md` 与 `SKILL.zh-CN.md` 均存在且 frontmatter 合法
    - [ ] 中英文版本的能力、流程、边界和约束语义一致
+   - [ ] `references/` 和 `assets/` 中所有可翻译文本均有 `.md` 与 `.zh-CN.md` 配对，且内容语义一致
+   - [ ] 英文文件只链接英文资源，中文文件优先链接对应的 `.zh-CN` 资源
    - [ ] 若存在 `agents/openai.yaml`，面向用户的配置值使用英文且紧邻中文翻译注释
    - [ ] 若存在 `scripts/`，说明性注释和文档字符串均按英文在前、中文在后的顺序提供双语内容
    - [ ] 技能在真实任务中验证可用
