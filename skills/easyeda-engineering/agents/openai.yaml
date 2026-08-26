@@ -1,0 +1,7 @@
+interface:
+  # 中文：EasyEDA 工程设计
+  display_name: "EasyEDA Engineering"
+  # 中文：设计、审查并验证 EasyEDA 原理图和 PCB
+  short_description: "Design, review, and verify EasyEDA schematics and PCBs"
+  # 中文：使用 $easyeda-engineering 审查或改进当前 EasyEDA 设计，并通过原理图网表或 PCB 设计数据及 DRC 验证结果。
+  default_prompt: "Use $easyeda-engineering to review or improve the active EasyEDA design and verify the result from schematic netlist or PCB design data and DRC."
