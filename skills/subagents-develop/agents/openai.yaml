@@ -1,7 +1,10 @@
 interface:
-  display_name: "并行 Agent 任务派发"
-  short_description: "只管派发任务，多 session 命名空间隔离，自主拆解并管理父子分支、worktree 及合并后回收"
-  default_prompt: "使用 $subagents-develop 派发并行开发任务（只管发布任务，无需关心当前代码状态），并在我明确命令合入主分支后清理本次父子分支和 worktree。"
+  # 中文：子 Agent 开发
+  display_name: "Subagents Develop"
+  # 中文：在隔离的分支和 worktree 中安全地编排开发任务
+  short_description: "Orchestrate development in isolated branches and worktrees"
+  # 中文：使用 $subagents-develop 在隔离的分支和 worktree 中完成开发，并仅在我明确下令后合入主分支。
+  default_prompt: "Use $subagents-develop to complete development in isolated branches and worktrees, merging into the main branch only when I explicitly ask."
 
 policy:
   allow_implicit_invocation: true
