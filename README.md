@@ -13,6 +13,15 @@ skills/
     └── assets/         # 可选：模板、示例等资源
 ```
 
+## 技能列表
+
+| Skill | 作用 |
+| --- | --- |
+| [`easyeda-engineering`](skills/easyeda-engineering/) | 对 EasyEDA 原理图和 PCB 进行工程设计、重构与审查，并通过设计数据完成连接性、DRC 和生产前验证。 |
+| [`maintain-agents-md`](skills/maintain-agents-md/) | 创建、更新、重组或审查仓库的 `AGENTS.md` 及其指令层级，使持久规则范围明确、精简且可验证。 |
+| [`maintain-js-package-docs`](skills/maintain-js-package-docs/) | 在开发公共 JavaScript 或 TypeScript 包时，同步维护 README、随包文档、示例以及 JSDoc/TSDoc，使文档与发布代码和版本保持一致。 |
+| [`subagents-develop`](skills/subagents-develop/) | 在隔离的 Git 分支和 worktree 中编排开发、修复或重构任务，并在适合时并行派发多个 Agent 后收束成果。 |
+
 ## 使用方式
 
 ### 通过 gh CLI 安装（推荐）
