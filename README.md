@@ -15,17 +15,7 @@ skills/
 
 ## 使用方式
 
-### 通过 skills CLI 安装（推荐）
-
-```bash
-# 列出本仓库的技能
-npx skills add pzehrel/skills --list
-
-# 安装指定技能
-npx skills add pzehrel/skills --skill <skill-name>
-```
-
-### 通过 gh CLI 安装
+### 通过 gh CLI 安装（推荐）
 
 GitHub CLI（v2.97+）内置了 `gh skill` 命令（preview 阶段）：
 
@@ -38,6 +28,16 @@ gh skill install pzehrel/skills <skill-name>
 
 # 列出已安装的技能
 gh skill list
+```
+
+### 通过 skills CLI 安装
+
+```bash
+# 列出本仓库的技能
+npx skills add pzehrel/skills --list
+
+# 安装指定技能
+npx skills add pzehrel/skills --skill <skill-name>
 ```
 
 ### 手动链接
