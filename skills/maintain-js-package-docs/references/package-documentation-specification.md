@@ -94,6 +94,39 @@ the original declaration comment is retained. Every overload **MUST** expose an 
 generated declarations and editor help; overloads with different contracts **MUST** document those
 differences explicitly.
 
+Every public callable signature **MUST** contain all applicable documentation components:
+
+| Component | Requirement |
+| --- | --- |
+| Summary | State the operation, observable behavior, and essential contract. |
+| `@typeParam` | Provide one entry for every generic parameter and explain its semantic role or constraint. |
+| `@param` | Provide one entry for every runtime parameter, including rest parameters; explain role, optional behavior, and defaults rather than repeating the type. |
+| `@returns` | Required for every non-constructor callable that can return a value; describe the result's meaning and branches. Omit only for `void` or `never`. |
+| `@throws` | Document each meaningful synchronous exception, including propagated callback failures. Cover async rejection here only when that is the project convention; otherwise state it in `@remarks`. If failure exists only in a result value, cover it under `@returns` instead. |
+| Overloads | Give every visible overload a complete applicable comment; use inheritance only when the toolchain is verified to preserve the exact contract. |
+
+This rule applies equally to functions, methods, constructors, call signatures, and function-valued
+properties. Documentation elsewhere in README, topic pages, an interface, an implementation body, or
+another overload does not substitute for the comment attached to the consumer-visible signature
+unless verified documentation inheritance connects them.
+
+Every generic public class, interface, and type alias **MUST** also provide one `@typeParam` entry for
+each generic parameter, even when the declaration is not callable.
+
+Example of a complete callable signature:
+
+```ts
+/**
+ * Creates a codec from reversible wire-format operations.
+ *
+ * @typeParam T - Business value represented by the codec.
+ * @param definition - Serialization and parsing operations for `T`.
+ * @returns A frozen codec carrying the supplied operations.
+ * @throws `TypeError` when either required operation is missing.
+ */
+export function defineFieldCodec<T>(definition: FieldCodecDefinition<T>): FieldCodec<T>
+```
+
 Public API documentation **MUST** explain applicable semantics that signatures cannot fully encode:
 
 - mental model, ownership, lifecycle, and resource cleanup;
@@ -139,6 +172,8 @@ The inspection **MUST** confirm that:
   present;
 - every public declaration and consumer-facing member retains an applicable documentation comment in
   declaration output, along with the local documentation hint;
+- every public callable retains complete summary, type-parameter, parameter, return, failure, and
+  overload documentation as applicable;
 - relative links resolve within the artifact or intentionally target an authoritative URL;
 - examples use only public exports and files available to consumers; and
 - private notes, secrets, caches, generated site output, and unintended large assets are absent.
@@ -162,6 +197,7 @@ A conforming package **SHOULD** also:
 - review the generated declaration surface as a documentation coverage inventory instead of relying
   on source comment counts;
 - add documentation impact to public API review and completion criteria; and
+- run existing JSDoc or TSDoc completeness linting when the repository provides it; and
 - validate local Markdown links and code examples in continuous integration when practical.
 
 A behavior-preserving internal refactor **SHOULD NOT** create documentation churn unless it changes a
@@ -215,7 +251,15 @@ An audit should report each `PD-*` requirement as `pass`, `fail`, or `not applic
 command output that supports the result. Report recommended improvements separately so optional work
 is not confused with a conformance failure.
 
+For PD-4, the audit **MUST** include a callable coverage table with these columns: API signature,
+summary, `@typeParam`, `@param`, `@returns`, `@throws` or result-failure coverage, overload coverage,
+and retained in generated declarations. A missing applicable cell is a conformance failure.
+
 ## Authoritative references
 
 - [TSDoc `@packageDocumentation`](https://tsdoc.org/pages/tags/packagedocumentation/)
+- [TSDoc `@typeParam`](https://tsdoc.org/pages/tags/typeparam/)
+- [TSDoc `@param`](https://tsdoc.org/pages/tags/param/)
+- [TSDoc `@returns`](https://tsdoc.org/pages/tags/returns/)
+- [TSDoc `@throws`](https://tsdoc.org/pages/tags/throws/)
 - [npm `package.json` file inclusion rules](https://docs.npmjs.com/files/package.json/)

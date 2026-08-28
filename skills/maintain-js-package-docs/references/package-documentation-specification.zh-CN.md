@@ -84,6 +84,36 @@ JSDoc 或 TSDoc 注释。消费者会交互的每个公共属性、方法、调�
 原始声明注释会保留，barrel re-export 不需要重复注释。每个重载都**必须**在生成声明和编辑器帮助中
 暴露适用注释；契约不同的重载**必须**明确记录这些差异。
 
+每个公开 callable 签名都**必须**包含所有适用的文档组成部分：
+
+| 组成部分 | 要求 |
+| --- | --- |
+| 摘要 | 说明操作、可观察行为和关键契约。 |
+| `@typeParam` | 每个泛型参数对应一项，并解释其语义角色或约束。 |
+| `@param` | 每个运行时参数（包括 rest 参数）对应一项；解释角色、可选行为和默认值，不复述类型。 |
+| `@returns` | 每个可能返回值的非构造 callable 都必须提供；描述结果含义和分支。只有 `void` 或 `never` 可以省略。 |
+| `@throws` | 记录每种有意义的同步异常，包括传播的回调失败。只有项目约定如此时才在这里覆盖异步拒绝，否则在 `@remarks` 中说明。如果失败只存在于结果值中，则改在 `@returns` 下覆盖。 |
+| 重载 | 每个可见重载都有完整的适用注释；只有经验证工具链会保留精确契约时才使用继承。 |
+
+本规则同样适用于函数、方法、构造函数、调用签名和函数值属性。README、主题页、接口、实现体或其他
+重载中的文档，不能替代附在消费者可见签名上的注释；只有经验证的文档继承明确连接二者时除外。
+
+每个泛型公开类、接口和类型别名也都**必须**为每个泛型参数提供一项 `@typeParam`，即使声明不可调用。
+
+完整 callable 签名示例：
+
+```ts
+/**
+ * Creates a codec from reversible wire-format operations.
+ *
+ * @typeParam T - Business value represented by the codec.
+ * @param definition - Serialization and parsing operations for `T`.
+ * @returns A frozen codec carrying the supplied operations.
+ * @throws `TypeError` when either required operation is missing.
+ */
+export function defineFieldCodec<T>(definition: FieldCodecDefinition<T>): FieldCodec<T>
+```
+
 公共 API 文档**必须**解释签名无法完整编码的适用语义：
 
 - 心智模型、所有权、生命周期和资源清理；
@@ -122,6 +152,7 @@ JSDoc 或 TSDoc 注释。消费者会交互的每个公共属性、方法、调�
 
 - README、文档索引、链接的本地页面、声明和必需示例均存在；
 - 生成声明中的每个公共声明和面向消费者的成员都保留适用的文档注释，同时保留本地文档提示；
+- 每个公开 callable 都按适用情况保留完整的摘要、泛型参数、参数、返回值、失败和重载文档；
 - 相对链接在产物内可解析，或有意指向权威 URL；
 - 示例只使用消费者可用的公共导出和文件；
 - 私有说明、密钥、缓存、生成的站点输出和非预期大型资源不存在。
@@ -143,6 +174,7 @@ JSDoc 或 TSDoc 注释。消费者会交互的每个公共属性、方法、调�
   `@defaultValue`、`@throws`、`@deprecated` 和 `@see`；
 - 把生成声明表面作为文档覆盖清单来审查，而不是依赖源码注释数量；
 - 把文档影响加入公共 API 评审和完成条件；
+- 仓库提供 JSDoc 或 TSDoc 完整性 lint 时运行它；
 - 在可行时通过持续集成验证本地 Markdown 链接和代码示例。
 
 行为保持不变的内部重构**不应该**制造文档变更，除非它改变了已记录的心智模型、扩展点、贡献者
@@ -193,7 +225,15 @@ npm 会特殊包含识别到的包根 README 和许可证文件，但这种行�
 审查时应把每项 `PD-*` 要求报告为 `pass`、`fail` 或 `not applicable`，并给出支持结论的文件或命令
 输出。推荐改进应单独汇报，避免把可选工作误认为规范不符合项。
 
+对于 PD-4，审查**必须**包含 callable 覆盖表，列为：API 签名、摘要、`@typeParam`、`@param`、
+`@returns`、`@throws` 或结果失败覆盖、重载覆盖、是否保留在生成声明中。任何适用单元格缺失都属于
+不符合规范。
+
 ## 权威参考
 
 - [TSDoc `@packageDocumentation`](https://tsdoc.org/pages/tags/packagedocumentation/)
+- [TSDoc `@typeParam`](https://tsdoc.org/pages/tags/typeparam/)
+- [TSDoc `@param`](https://tsdoc.org/pages/tags/param/)
+- [TSDoc `@returns`](https://tsdoc.org/pages/tags/returns/)
+- [TSDoc `@throws`](https://tsdoc.org/pages/tags/throws/)
 - [npm `package.json` 文件包含规则](https://docs.npmjs.com/files/package.json/)

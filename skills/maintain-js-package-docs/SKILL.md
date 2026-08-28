@@ -1,6 +1,6 @@
 ---
 name: maintain-js-package-docs
-description: Apply a version-aligned documentation specification while developing public JavaScript or TypeScript packages, with complete public JSDoc or TSDoc coverage and aligned README, bundled docs, and examples. Use for features, API changes, deprecations, migrations, documentation adoption, audits, and releases.
+description: Apply a version-aligned documentation specification while developing public JavaScript or TypeScript packages, with complete signature-level public JSDoc or TSDoc and aligned README, bundled docs, and examples. Use for features, API changes, deprecations, migrations, documentation adoption, audits, and releases.
 license: MIT
 metadata:
   repository: https://github.com/pzehrel/skills
@@ -49,9 +49,9 @@ load only the affected documentation.
    need duplicate comments when the original declaration comment survives in generated declarations.
    Document every overload whose contract differs or whose comment would otherwise be absent from
    editor help.
-4. Describe semantics that types cannot express, including defaults, invariants, side effects,
-   failure conditions, ownership, and lifecycle. A concise summary is sufficient for a genuinely
-   simple declaration, but an undocumented public declaration is not.
+4. Treat a public callable comment as incomplete until it documents every applicable generic type
+   parameter, runtime parameter, return value, thrown or rejected failure, and overload difference.
+   Describe semantic roles and behavior instead of restating TypeScript types.
 5. Add comments to non-public functions when their purpose, reason, invariant, mutation, ordering,
    error translation, or algorithm is not clear from names and types. Do not comment trivial wrappers,
    callbacks, or obvious local helpers merely to increase a count.
@@ -69,6 +69,36 @@ load only the affected documentation.
 Avoid copying the same contract into multiple places. Let types define exact shapes, tests define
 verified behavior, README provide orientation, and topic docs explain concepts and tasks. Link between
 these layers instead of maintaining parallel prose.
+
+## Enforce complete callable signatures
+
+For every exported function, public method, constructor, call signature, and function-valued public
+property, require all applicable parts in the comment attached to the declaration consumers see:
+
+- a summary that states the operation and its observable contract;
+- one `@typeParam` entry for each generic parameter;
+- one `@param` entry for each runtime parameter, including rest parameters, with its semantic role,
+  optional behavior, and default when applicable;
+- `@returns` for every non-constructor callable that can return a value, describing meaning rather
+  than repeating the return type; omit it only for `void` or `never`;
+- one or more `@throws` entries for meaningful synchronous exceptions, including propagated callback
+  failures; document async rejection in `@throws` only when that is the project convention, otherwise
+  state it explicitly in `@remarks`; when failures are represented only in a result value, explain
+  its success and failure branches under `@returns` instead; and
+- separate complete comments for overloads unless verified `{@inheritDoc}` or tool-supported comment
+  inheritance preserves the exact contract for each visible signature.
+
+Function-valued properties have the same requirements as method syntax. Keep the existing API shape
+unless a change is otherwise justified; attach the tags to the property comment and verify how the
+project's declaration and documentation tools render them. Documentation elsewhere does not excuse a
+missing or partial signature comment.
+
+Generic public classes, interfaces, and type aliases also require one `@typeParam` entry for every
+generic parameter even when they are not callable.
+
+Before finishing, make a temporary coverage table with one row per public callable and columns for
+summary, type parameters, parameters, returns, failures, overloads, and generated-declaration
+retention. Do not report completion while any applicable cell is missing.
 
 ## Keep installed documentation usable
 
@@ -90,6 +120,8 @@ authorizes those changes. A dry-run package inspection is read-only and may be u
 ## Validate the result
 
 Run the repository's applicable tests, type checks, documentation checks, and example validation.
+Run any existing JSDoc or TSDoc completeness linter and treat missing signature components as
+failures; do not add a new lint dependency unless the task authorizes that tooling change.
 For npm package work, inspect the actual artifact with `npm pack --dry-run` or the repository's
 equivalent and confirm that README, intended docs, examples, declarations, runtime files, and source
 maps follow the package policy. Do not assume a file is published merely because it exists in the
@@ -98,7 +130,7 @@ repository.
 Review the diff for stale names, broken relative links, duplicated authority, comments stripped from
 declarations, examples that no longer type-check, and documentation claims not covered by code or
 tests. Compare the generated public declaration surface against the API inventory and list any public
-symbol or member without a retained documentation comment. Report which documentation surfaces
-changed, which checks ran, and any package managers, runtimes, or agents that were not tested. For
-adoption or audit work, also report unmet specification requirements separately from optional
-improvements.
+symbol or member with a missing or incomplete documentation comment, including missing `@typeParam`,
+`@param`, `@returns`, `@throws`, or overload coverage. Report which documentation surfaces changed,
+which checks ran, and any package managers, runtimes, or agents that were not tested. For adoption or
+audit work, also report unmet specification requirements separately from optional improvements.
