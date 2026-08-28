@@ -22,7 +22,7 @@ Each layer has one primary responsibility:
 
 | Layer | Primary responsibility | Typical content |
 | --- | --- | --- |
-| Public types and JSDoc or TSDoc | Precise local contract and documentation discovery | Parameters, returns, defaults, invariants, errors, lifecycle, deprecation, local docs path |
+| Public types and editor-friendly API comments | Precise local contract and documentation discovery | Parameters, returns, defaults, invariants, errors, lifecycle, deprecation, local docs path |
 | Package-root README | Orientation and first route | Purpose, install, minimal example, support boundary, documentation index link |
 | Bundled documentation index | Progressive task selection | Short links grouped by goal, concept, integration, migration, or failure mode |
 | Focused bundled pages | Explanation and operational guidance | Concepts, configuration, recipes, migration, troubleshooting |
@@ -85,7 +85,7 @@ The package build **MUST** retain this hint in the artifact that consumers and l
 ### PD-4: Complete public declaration and semantic coverage
 
 Every exported function, class, constructor, value, type alias, interface, and enum in the actual
-package public surface **MUST** have an authoritative JSDoc or TSDoc comment. Every public property,
+package public surface **MUST** have an authoritative `/** ... */` API comment. Every public property,
 method, call signature, and constructor that consumers interact with **MUST** also be documented.
 
 Determine this surface from package export maps, public entry points, and generated declarations, not
@@ -94,15 +94,23 @@ the original declaration comment is retained. Every overload **MUST** expose an 
 generated declarations and editor help; overloads with different contracts **MUST** document those
 differences explicitly.
 
-Every public callable signature **MUST** contain all applicable documentation components:
+For TypeScript sources, the baseline profile **MUST** favor the JSDoc-compatible subset surfaced by
+TypeScript language services. TypeScript syntax remains authoritative for types: comments **MUST NOT**
+repeat parameter or return types in braces, and **MUST NOT** use JSDoc `@template` to redeclare a
+TypeScript generic. JavaScript sources **MAY** use TypeScript-supported JSDoc type tags when comments
+provide the package's type information. TSDoc-only tags and structures **MAY** be required by a
+repository that has explicitly adopted a TSDoc-aware generator, API review tool, or linter; they are
+not part of baseline conformance merely because the source language is TypeScript.
+
+Every public callable signature **MUST** contain all applicable semantic documentation:
 
 | Component | Requirement |
 | --- | --- |
 | Summary | State the operation, observable behavior, and essential contract. |
-| `@typeParam` | Provide one entry for every generic parameter and explain its semantic role or constraint. |
 | `@param` | Provide one entry for every runtime parameter, including rest parameters; explain role, optional behavior, and defaults rather than repeating the type. |
-| `@returns` | Required for every non-constructor callable that can return a value; describe the result's meaning and branches. Omit only for `void` or `never`. |
-| `@throws` | Document each meaningful synchronous exception, including propagated callback failures. Cover async rejection here only when that is the project convention; otherwise state it in `@remarks`. If failure exists only in a result value, cover it under `@returns` instead. |
+| Return semantics | Use `@returns` when the result has meaning not already obvious from the API name and TypeScript return type, including ownership, identity, mutability, units, branches, caching, or result-based failure. It may be omitted for `void`, `never`, or a genuinely self-explanatory result. |
+| Generic semantics | Explain a type parameter when its role, constraint, relationship, or lifetime is not obvious. Put the explanation in editor-visible prose or the related `@param`/`@returns`; use `@typeParam` when the adopted TSDoc toolchain supports or requires it. |
+| Failure semantics | Document meaningful synchronous exceptions, asynchronous rejections, propagated callback failures, and result-based failures in a form the established editor and documentation toolchain renders. If `@throws` is not surfaced, put critical behavior in visible prose. Do not invent failure behavior. |
 | Overloads | Give every visible overload a complete applicable comment; use inheritance only when the toolchain is verified to preserve the exact contract. |
 
 This rule applies equally to functions, methods, constructors, call signatures, and function-valued
@@ -110,19 +118,22 @@ properties. Documentation elsewhere in README, topic pages, an interface, an imp
 another overload does not substitute for the comment attached to the consumer-visible signature
 unless verified documentation inheritance connects them.
 
-Every generic public class, interface, and type alias **MUST** also provide one `@typeParam` entry for
-each generic parameter, even when the declaration is not callable.
+The common baseline tags are summary prose, `@param`, `@returns`, `@deprecated`, `@see`, and
+`{@link}`. A package **MAY** use richer TSDoc tags where its tools support them. Generic public classes,
+interfaces, and type aliases **MUST** explain non-obvious generic semantics, but baseline conformance
+does not require a mechanical `@typeParam` entry for every declared type parameter.
 
-Example of a complete callable signature:
+Example of a complete editor-first TypeScript signature:
 
 ```ts
 /**
  * Creates a codec from reversible wire-format operations.
  *
- * @typeParam T - Business value represented by the codec.
+ * The returned codec is immutable. Throws `TypeError` if either required operation is missing.
+ * `T` is the business value represented by the codec.
+ *
  * @param definition - Serialization and parsing operations for `T`.
  * @returns A frozen codec carrying the supplied operations.
- * @throws `TypeError` when either required operation is missing.
  */
 export function defineFieldCodec<T>(definition: FieldCodecDefinition<T>): FieldCodec<T>
 ```
@@ -172,8 +183,8 @@ The inspection **MUST** confirm that:
   present;
 - every public declaration and consumer-facing member retains an applicable documentation comment in
   declaration output, along with the local documentation hint;
-- every public callable retains complete summary, type-parameter, parameter, return, failure, and
-  overload documentation as applicable;
+- every public callable retains a summary and parameter documentation plus all applicable non-obvious
+  return, generic, failure, and overload semantics;
 - relative links resolve within the artifact or intentionally target an authoritative URL;
 - examples use only public exports and files available to consumers; and
 - private notes, secrets, caches, generated site output, and unintended large assets are absent.
@@ -192,8 +203,10 @@ A conforming package **SHOULD** also:
 - organize the documentation index around user goals rather than its source tree;
 - keep topic pages focused enough for selective reading;
 - provide examples that are type-checked, tested, or otherwise executable;
+- optimize TypeScript source comments for editor hover and signature help before adding tags used only
+  by a documentation generator;
 - use established JSDoc or TSDoc tags such as `@remarks`, `@example`, `@defaultValue`, `@throws`,
-  `@deprecated`, and `@see` where they improve generated output;
+  `@deprecated`, and `@see` where the adopted toolchain renders them usefully;
 - review the generated declaration surface as a documentation coverage inventory instead of relying
   on source comment counts;
 - add documentation impact to public API review and completion criteria; and
@@ -252,11 +265,16 @@ command output that supports the result. Report recommended improvements separat
 is not confused with a conformance failure.
 
 For PD-4, the audit **MUST** include a callable coverage table with these columns: API signature,
-summary, `@typeParam`, `@param`, `@returns`, `@throws` or result-failure coverage, overload coverage,
-and retained in generated declarations. A missing applicable cell is a conformance failure.
+summary, `@param`, non-obvious return semantics, non-obvious generic semantics, failure semantics,
+overload coverage, editor rendering, and retained in generated declarations. A semantic cell may be
+marked not applicable only when the name and signature already make that behavior unambiguous. A
+missing applicable cell is a conformance failure. When editor rendering cannot be tested, report it as
+not tested rather than claiming compatibility.
 
 ## Authoritative references
 
+- [VS Code: Editing TypeScript](https://code.visualstudio.com/docs/typescript/typescript-editing)
+- [TypeScript JSDoc reference](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)
 - [TSDoc `@packageDocumentation`](https://tsdoc.org/pages/tags/packagedocumentation/)
 - [TSDoc `@typeParam`](https://tsdoc.org/pages/tags/typeparam/)
 - [TSDoc `@param`](https://tsdoc.org/pages/tags/param/)
