@@ -1,6 +1,6 @@
 ---
 name: maintain-js-package-docs
-description: Apply a version-aligned documentation specification while developing public JavaScript or TypeScript packages, keeping README, bundled docs, examples, and JSDoc or TSDoc aligned with shipped code. Use for features, API changes, deprecations, migrations, documentation adoption, audits, and releases.
+description: Apply a version-aligned documentation specification while developing public JavaScript or TypeScript packages, with complete public JSDoc or TSDoc coverage and aligned README, bundled docs, and examples. Use for features, API changes, deprecations, migrations, documentation adoption, audits, and releases.
 license: MIT
 metadata:
   repository: https://github.com/pzehrel/skills
@@ -41,18 +41,29 @@ load only the affected documentation.
 
 1. Implement the requested behavior and its tests. Do not document planned behavior as if it already
    exists.
-2. Update the closest public type comments. Describe semantics that types cannot express, including
-   defaults, invariants, side effects, failure conditions, ownership, and lifecycle. Avoid merely
-   restating the signature.
-3. Preserve or add a package-level JSDoc or TSDoc comment at the public type entry point when it helps
+2. Inventory the actual consumer-facing API from `package.json` exports, public entry points, and the
+   generated declaration surface. Do not equate every source-level `export` with a public package
+   export.
+3. Ensure every public exported function, class, constructor, value, type, interface, enum, and every
+   consumer-facing public member has an authoritative JSDoc or TSDoc comment. Re-export barrels do not
+   need duplicate comments when the original declaration comment survives in generated declarations.
+   Document every overload whose contract differs or whose comment would otherwise be absent from
+   editor help.
+4. Describe semantics that types cannot express, including defaults, invariants, side effects,
+   failure conditions, ownership, and lifecycle. A concise summary is sufficient for a genuinely
+   simple declaration, but an undocumented public declaration is not.
+5. Add comments to non-public functions when their purpose, reason, invariant, mutation, ordering,
+   error translation, or algorithm is not clear from names and types. Do not comment trivial wrappers,
+   callbacks, or obvious local helpers merely to increase a count.
+6. Preserve or add a package-level JSDoc or TSDoc comment at the public type entry point when it helps
    users discover the package purpose and bundled documentation. Follow the repository's existing
    comment standard and ensure declaration generation retains useful comments.
-4. Update the smallest authoritative human-facing document. Keep README as the concise entry point;
+7. Update the smallest authoritative human-facing document. Keep README as the concise entry point;
    route detailed concepts, tasks, recipes, migrations, and troubleshooting into focused files under
    the repository's established documentation directory.
-5. Update examples when the recommended call pattern changes. Prefer examples that are type-checked,
+8. Update examples when the recommended call pattern changes. Prefer examples that are type-checked,
    tested, or otherwise runnable by the existing project workflow.
-6. For breaking changes and deprecations, document both the replacement and the migration path. Keep
+9. For breaking changes and deprecations, document both the replacement and the migration path. Keep
    old guidance only when supported versions still require it, and label that scope explicitly.
 
 Avoid copying the same contract into multiple places. Let types define exact shapes, tests define
@@ -86,6 +97,8 @@ repository.
 
 Review the diff for stale names, broken relative links, duplicated authority, comments stripped from
 declarations, examples that no longer type-check, and documentation claims not covered by code or
-tests. Report which documentation surfaces changed, which checks ran, and any package managers,
-runtimes, or agents that were not tested. For adoption or audit work, also report unmet specification
-requirements separately from optional improvements.
+tests. Compare the generated public declaration surface against the API inventory and list any public
+symbol or member without a retained documentation comment. Report which documentation surfaces
+changed, which checks ran, and any package managers, runtimes, or agents that were not tested. For
+adoption or audit work, also report unmet specification requirements separately from optional
+improvements.

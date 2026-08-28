@@ -82,7 +82,17 @@ Example:
 
 The package build **MUST** retain this hint in the artifact that consumers and language tools read.
 
-### PD-4: Semantic coverage
+### PD-4: Complete public declaration and semantic coverage
+
+Every exported function, class, constructor, value, type alias, interface, and enum in the actual
+package public surface **MUST** have an authoritative JSDoc or TSDoc comment. Every public property,
+method, call signature, and constructor that consumers interact with **MUST** also be documented.
+
+Determine this surface from package export maps, public entry points, and generated declarations, not
+from source-level `export` keywords alone. A barrel re-export does not need a duplicate comment when
+the original declaration comment is retained. Every overload **MUST** expose an applicable comment in
+generated declarations and editor help; overloads with different contracts **MUST** document those
+differences explicitly.
 
 Public API documentation **MUST** explain applicable semantics that signatures cannot fully encode:
 
@@ -92,8 +102,13 @@ Public API documentation **MUST** explain applicable semantics that signatures c
 - recommended patterns, limitations, deprecation replacements, and compatibility boundaries.
 
 The package does not need a page for every category. It needs coverage for every category that can
-materially change correct use of that package version. Comments **MUST NOT** merely restate names and
-types.
+materially change correct use of that package version. A genuinely simple declaration may use a
+concise summary, but it may not be left undocumented. Comments **MUST NOT** merely repeat the signature
+without explaining the declaration's role.
+
+Non-public functions **SHOULD** have comments when names and types do not reveal their purpose,
+rationale, invariants, mutation, ordering, error translation, or algorithm. Trivial wrappers,
+callbacks, and obvious local helpers **SHOULD NOT** receive comments merely to satisfy a numeric goal.
 
 ### PD-5: Single authority and progressive disclosure
 
@@ -122,7 +137,8 @@ The inspection **MUST** confirm that:
 
 - README, the documentation index, linked local pages, declarations, and required examples are
   present;
-- declaration output retains required semantic comments and the local documentation hint;
+- every public declaration and consumer-facing member retains an applicable documentation comment in
+  declaration output, along with the local documentation hint;
 - relative links resolve within the artifact or intentionally target an authoritative URL;
 - examples use only public exports and files available to consumers; and
 - private notes, secrets, caches, generated site output, and unintended large assets are absent.
@@ -143,6 +159,8 @@ A conforming package **SHOULD** also:
 - provide examples that are type-checked, tested, or otherwise executable;
 - use established JSDoc or TSDoc tags such as `@remarks`, `@example`, `@defaultValue`, `@throws`,
   `@deprecated`, and `@see` where they improve generated output;
+- review the generated declaration surface as a documentation coverage inventory instead of relying
+  on source comment counts;
 - add documentation impact to public API review and completion criteria; and
 - validate local Markdown links and code examples in continuous integration when practical.
 
