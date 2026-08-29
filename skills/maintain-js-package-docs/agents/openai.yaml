@@ -1,10 +1,10 @@
 interface:
   # 中文：维护 JS 包文档
   display_name: "Maintain JS Package Docs"
-  # 中文：应用与版本一致的 JS/TS 包文档规范
-  short_description: "Apply version-aligned JS package documentation"
-  # 中文：使用 $maintain-js-package-docs 按照包文档规范实现此变更，并让发布文档与代码保持一致。
-  default_prompt: "Use $maintain-js-package-docs to implement this change under the package documentation specification and keep shipped docs aligned with the code."
+  # 中文：同步维护 JS/TS 包代码与文档
+  short_description: "Keep JS/TS package code and docs aligned"
+  # 中文：在实现此 JS/TS 包变更时使用 $maintain-js-package-docs，让公共 API 注释和随包文档与代码保持一致。
+  default_prompt: "Use $maintain-js-package-docs while implementing this JS/TS package change; keep public API comments and shipped documentation aligned with the code."
 
 policy:
   allow_implicit_invocation: true
