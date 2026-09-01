@@ -13,6 +13,14 @@ localized language, ask the user before creating or changing documentation. Once
 English file and localized translation semantically aligned; preserve code, commands, identifiers, and
 links exactly.
 
+## Agent instruction documents
+
+`AGENTS.md` is a documentation surface and may be authoritative. Write its rules as explicit,
+scoped prose: state the trigger, required action, exceptions, and verification. Keep durable rules
+separate from project background and temporary status. This writing guide covers clarity, semantic
+coverage, and bilingual presentation; a repository's instruction-maintenance workflow remains the
+authority for admitting rules and changing hierarchy or scope.
+
 ## Semantic comment coverage
 
 For every consumer-visible code element, check the declaration, schema, or behavior a reader actually

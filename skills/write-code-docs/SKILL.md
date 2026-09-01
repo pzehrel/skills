@@ -1,6 +1,6 @@
 ---
 name: write-code-docs
-description: Write and review clear, behavior-accurate bilingual code comments, API documentation, README files, guides, examples, and other Markdown docs in English plus the repository's localized language. Use when code or a user-facing workflow needs explanation, contract documentation, or synchronized examples; infer the localized language from repository evidence or ask when it is ambiguous.
+description: Write and review clear, behavior-accurate bilingual code comments, API documentation, AGENTS.md files, README files, guides, examples, and other Markdown docs in English plus the repository's localized language. Use when code or an agent- or user-facing workflow needs explanation, contract documentation, or synchronized examples; infer the localized language from repository evidence or ask when it is ambiguous.
 license: MIT
 metadata:
   repository: https://github.com/pzehrel/skills
@@ -13,14 +13,18 @@ complete enough for a developer or coding Agent to use, and concise enough to st
 Documentation is part of the interface when it describes public behavior, supported workflows, or
 operational constraints; do not document behavior that the code does not implement.
 
-Use this skill for code comments, docstrings, JSDoc/TSDoc, API references, README sections, guides,
-examples, changelogs, and Markdown documentation. Every explanatory comment and documentation surface
-created or changed under this skill must be written in English plus exactly one repository-localized
+Use this skill for code comments, docstrings, JSDoc/TSDoc, API references, `AGENTS.md` and other agent
+instruction files, README sections, guides, examples, changelogs, and Markdown documentation. Every
+explanatory comment and documentation surface created or changed under this skill must be written in
+English plus exactly one repository-localized
 language, with semantic parity. English is always the first and canonical language. Infer the localized
 language from repository instructions, existing counterparts, localization configuration, and the
 user's request; do not assume Chinese, the user's language, or another default, and ask before editing
 when the evidence does not identify it.
-This skill does not authorize publishing, changing APIs, or adding unrelated instructions.
+English comes first because an Agent is the primary reader; a human reviewer should then be able to read
+both complete blocks and judge whether the documentation is correct and useful. The localized block is
+not a summary or afterthought. This skill does not authorize publishing, changing APIs, or adding
+unrelated instructions.
 
 ## Inspect before writing
 
@@ -64,6 +68,10 @@ can follow the surrounding convention directly.
 
 ## Write Markdown and examples
 
+- Treat `AGENTS.md` and other agent-instruction Markdown as a documentation surface. Keep each rule
+  explicit about its trigger, action, exceptions, and verification; separate durable rules from project
+  background and temporary status. If the task changes rule admission, hierarchy, or scope, follow the
+  repository's instruction-maintenance workflow in addition to this writing guidance.
 - Publish every changed human-facing Markdown page, README section, example explanation, and changelog
   entry in English plus the inferred localized language. Preserve semantic parity, links, commands,
   identifiers, code, and safety boundaries; do not invent a localized language without evidence.
@@ -77,9 +85,11 @@ can follow the surrounding convention directly.
   the recommended call pattern changes.
 - Match the repository's terminology, voice, formatting, and locale policy. Preserve canonical paths,
   commands, identifiers, API names, and code exactly where translation would make them unusable.
-- Keep reference Markdown advisory. Do not tell a consuming Agent to ignore repository instructions,
-  change its workflow, run commands, or edit files. Mandatory language is appropriate only for a real
-  API or runtime precondition.
+- Keep ordinary reference Markdown advisory. Do not use it to tell a consuming Agent to ignore
+  repository instructions, change its workflow, run commands, or edit files. `AGENTS.md` and other
+  instruction files are the deliberate exception: they may contain scoped, authoritative rules when
+  the repository has authorized them, but those rules must remain explicit, verifiable, and consistent
+  with higher-priority instructions.
 
 ## Validate the result
 
