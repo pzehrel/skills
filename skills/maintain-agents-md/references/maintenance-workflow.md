@@ -9,7 +9,8 @@ unambiguous rule update, the core skill is sufficient.
 Start with a read-only inventory:
 
 - root, nested, localized, and override variants of `AGENTS.md`;
-- routed policy files under `.agents/rules/` or an established equivalent;
+- routed policy files under `.agents/rules/` or an established equivalent, including the exact
+  pointer wording and task branches that expose each file;
 - repository configuration that changes instruction discovery or size limits; and
 - tool-specific instruction files only for tools the repository actually uses or the user requests.
 
@@ -75,7 +76,8 @@ commits.
 - Add a nested `AGENTS.md` only for a real subtree difference, and write only the delta from its
   parent.
 - Put detailed repository-specific working policies in `.agents/rules/<topic>.md` and route to them
-  conditionally.
+  conditionally. Name what each target governs and every distinct task branch that must read it;
+  do not spend pointer text on synonyms for the same branch.
 - Put product, domain, architecture, requirements, schemas, and roadmaps in `docs/`.
 - Put portable capability, scripts, templates, and reusable workflows in a skill.
 - Create tool-specific compatibility files only when requested or demonstrably required by the
@@ -84,6 +86,10 @@ commits.
 Do not generate instruction files for every monorepo package or common directory by default. A
 nested file is justified by different commands, tools, safety boundaries, or conventions—not by the
 directory's existence.
+
+Within each selected file, co-locate a rule's definition, trigger, required action, exceptions, and
+completion criterion. Do not scatter one obligation across an overview, a procedure, and a final
+check when one focused section can carry the complete meaning.
 
 ## 5. Compact without weakening rules
 
@@ -95,9 +101,11 @@ review triggers, not universal validity limits:
 
 Compact in this order:
 
-1. remove personas, introductions, conclusions, generic advice, and empty sections;
+1. remove personas, introductions, conclusions, generic advice, empty sections, and no-op
+   instructions that do not change repository-specific decisions or verification;
 2. remove duplicates and rules fully enforced by automation when no agent action remains;
-3. replace project-document summaries with conditional links;
+3. replace project-document summaries and cheap environment lookups with conditional links or the
+   authoritative source, retaining only non-obvious conventions, reasons, and required actions;
 4. move detailed working procedures to `.agents/rules/`;
 5. move subtree-only differences to the nearest nested instruction file; and
 6. combine related bullets without losing triggers, actions, exceptions, or verification criteria.
@@ -115,6 +123,9 @@ Check the resulting effective chain, not only the editing process:
   paths, task status, roadmap, or tool inventory entered standing guidance;
 - root, nested, `.agents/rules/`, `docs/`, skills, and compatibility files have no duplicated
   authority;
+- every context pointer names what its target governs and covers the distinct task branches that
+  require it without becoming a catch-all;
+- each rule keeps its trigger, action, material exceptions, and completion criterion together;
 - nested instructions contain only scoped differences and do not silently weaken parents;
 - language and localization follow repository evidence and required counterparts remain aligned;
 - compatibility behavior is current for each selected tool;

@@ -86,6 +86,11 @@ Do not duplicate a detailed policy in `AGENTS.md`. Add the smallest useful routi
 always-on invariant and link to the authoritative document. Do not preload or require unrelated
 documents.
 
+Treat every routing entry as a context pointer, not merely a link. Its wording must identify what
+the target governs and the distinct task conditions that require reading it. Put the operative
+condition early, collapse synonyms for the same condition, and avoid catch-all routes that make the
+target effectively always loaded. A valuable policy behind a vague route is still undiscoverable.
+
 ## Reconcile instead of appending
 
 When guidance already exists, inventory actionable rules rather than merging sections mechanically.
@@ -168,12 +173,19 @@ and report the assumption.
 ## Write actionable rules
 
 - Use scoped, imperative, testable language.
-- State when a rule applies and what observable result satisfies it.
+- Keep a rule's trigger, required action, material exceptions, and verification criterion together
+  so an agent does not have to reconstruct one obligation from scattered sections.
+- State when a rule applies and what observable result satisfies it. Make completion criteria both
+  checkable and exhaustive when partial compliance would be unsafe or misleading.
 - Preserve necessary authorization, safety, and stopping boundaries.
 - When actions have different risk levels, distinguish what the agent may do, must ask before
   doing, and must never do.
+- Prefer stating the required behavior positively. Use prohibitions for real guardrails, and pair
+  them with the safe action the agent should take instead.
 - Prefer stable concepts over tool output, current file counts, roadmap status, or discoverable
-  configuration values.
+  configuration values. Do not cache a cheap environment lookup in prose; record the non-obvious
+  convention, reason, or action that the environment cannot express.
+- Remove no-op guidance that would not change agent decisions or verification in this repository.
 - Remove or consolidate superseded text instead of appending another overlapping rule.
 - Keep links relative and verify that every target exists.
 - When the repository maintains language counterparts, update all required versions together and
@@ -193,6 +205,12 @@ multiple modes, examples, or a long checklist. Add a routing entry that names th
 precisely. Put project or business material in `docs/` instead. Avoid a generic "read all docs"
 instruction.
 
+Balance two costs when deciding what to inline. Always-loaded text spends agent context on every
+task; routed text adds discovery and navigation cost. Inline what nearly every applicable task
+needs. Disclose material used only by a distinct branch, and make its route strong enough to fire
+for that branch. Split by scope or task branch, not by length alone, and keep closely related rules
+co-located after the split.
+
 ## Validate the change
 
 Before finishing:
@@ -200,8 +218,8 @@ Before finishing:
 1. Re-read the complete effective instruction chain for representative affected paths.
 2. Check for contradictions, duplicated authority, broken links, scope leaks, and rules that cannot
    be verified.
-3. Confirm that routing entries describe when to read their targets and that detailed documents do
-   not need to be loaded for unrelated work.
+3. Confirm that each routing entry identifies what its target governs, distinguishes every task
+   branch that should trigger it, and does not load the target for unrelated work.
 4. Confirm that each changed document follows the inferred language convention and that all
    required language counterparts remain semantically aligned.
 5. Verify every cited path and command against its current source, and remove unresolved template
