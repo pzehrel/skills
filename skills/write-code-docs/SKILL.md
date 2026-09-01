@@ -1,0 +1,106 @@
+---
+name: write-code-docs
+description: Write and review clear, behavior-accurate bilingual code comments, API documentation, README files, guides, examples, and other Markdown docs in English plus the repository's localized language. Use when code or a user-facing workflow needs explanation, contract documentation, or synchronized examples; infer the localized language from repository evidence or ask when it is ambiguous.
+license: MIT
+metadata:
+  repository: https://github.com/pzehrel/skills
+---
+
+# Write Code Documentation
+
+Make documentation explain the behavior a reader must rely on. Keep it close to the source of truth,
+complete enough for a developer or coding Agent to use, and concise enough to stay maintainable.
+Documentation is part of the interface when it describes public behavior, supported workflows, or
+operational constraints; do not document behavior that the code does not implement.
+
+Use this skill for code comments, docstrings, JSDoc/TSDoc, API references, README sections, guides,
+examples, changelogs, and Markdown documentation. Every explanatory comment and documentation surface
+created or changed under this skill must be written in English plus exactly one repository-localized
+language, with semantic parity. English is always the first and canonical language. Infer the localized
+language from repository instructions, existing counterparts, localization configuration, and the
+user's request; do not assume Chinese, the user's language, or another default, and ask before editing
+when the evidence does not identify it.
+This skill does not authorize publishing, changing APIs, or adding unrelated instructions.
+
+## Inspect before writing
+
+1. Read the effective repository instructions and the nearest existing documentation with the same
+   audience and purpose.
+2. Determine the behavior or workflow that changed, the authoritative source (code, types, tests,
+   configuration, or command output), the intended reader, and the smallest documentation surface
+   that should change.
+3. Determine the repository's localized language before writing; English remains the canonical first
+   language. Check existing names, links, terminology, examples, version scope, and deprecation policy.
+   Preserve unrelated edits and do not duplicate a contract in competing authoritative locations.
+
+For detailed comment and Markdown patterns, read
+[references/documentation-writing-guide.md](references/documentation-writing-guide.md) when adding a
+new documentation structure, auditing coverage, or resolving a style ambiguity. Small local edits
+can follow the surrounding convention directly.
+
+## Write useful code comments
+
+- Write every explanatory comment or docstring in English followed by the complete localized-language
+  counterpart. Do not interleave languages sentence by sentence; keep the two complete blocks adjacent
+  so they cannot drift.
+- Comment the semantic contract: purpose, preconditions, invariants, side effects, ordering,
+  ownership or lifetime, failure behavior, units, compatibility constraints, and the reason behind
+  a non-obvious choice.
+- Keep comments attached to the declaration or code they describe. Prefer one authoritative comment
+  over repeated copies; link to deeper documentation when the explanation is large.
+- For every consumer-visible code element—not only functions, but also classes, methods, constructors,
+  fields, properties, types, enum variants, events, commands, configuration keys, schemas, and state
+  transitions—document each part that is not unambiguous from its name or declaration. Explain the
+  semantic role of every input, field, option, or variant; optionality and defaults; units and valid
+  ranges; ownership and mutability; lifecycle and ordering; side effects; failure behavior; and
+  compatibility or deprecation boundaries.
+- When the language or documentation tool provides structured tags (for example JSDoc or TSDoc), use
+  the repository's established syntax without making it the source of truth. Keep structured fields
+  unique, put English and localized-language text in each field's description, and ensure the prose
+  remains complete when tool-specific tags are ignored. Do not merely restate types or signatures.
+- Add comments to private code only when names and types do not make the purpose, invariant, mutation,
+  ordering, error translation, or compatibility reason clear. Do not comment trivial wrappers or
+  obvious control flow merely to increase coverage.
+
+## Write Markdown and examples
+
+- Publish every changed human-facing Markdown page, README section, example explanation, and changelog
+  entry in English plus the inferred localized language. Preserve semantic parity, links, commands,
+  identifiers, code, and safety boundaries; do not invent a localized language without evidence.
+- Start with the reader's goal and shortest successful path. State prerequisites, supported scope,
+  expected result, important limitations, and recovery or troubleshooting paths when relevant.
+- Use headings and links to route by intent. Keep README material orienting and self-contained; move
+  detailed concepts, recipes, migrations, and troubleshooting into focused pages. Use relative links
+  for documents shipped together and verify every target.
+- Make examples complete, current, and runnable or type-checked when the project can support that.
+  Explain non-obvious setup, inputs, outputs, lifecycle, and failure handling. Update examples when
+  the recommended call pattern changes.
+- Match the repository's terminology, voice, formatting, and locale policy. Preserve canonical paths,
+  commands, identifiers, API names, and code exactly where translation would make them unusable.
+- Keep reference Markdown advisory. Do not tell a consuming Agent to ignore repository instructions,
+  change its workflow, run commands, or edit files. Mandatory language is appropriate only for a real
+  API or runtime precondition.
+
+## Validate the result
+
+Run the repository's applicable tests, type checks, documentation linters, link checks, and example
+validation. If no automated check exists, perform a focused read-through against the authoritative
+source and inspect the rendered Markdown when presentation could hide meaning.
+
+Before reporting completion, verify that:
+
+- every documented claim, default, error, link, example, and version qualifier is supported by code,
+  tests, configuration, or an explicitly stated assumption;
+- public API coverage includes the relevant parameters, returns, failures, overloads, and deprecations;
+- no stale names, duplicated authority, broken links, or planned behavior presented as shipped remain;
+- English and localized-language counterparts remain semantically aligned;
+- every consumer-visible declaration or structured element has semantic coverage for its applicable
+  inputs, fields, variants, outputs, defaults, failures, lifecycle, side effects, and constraints;
+- every changed explanatory comment and human-facing documentation surface exists in English followed
+  by the inferred localized language, with the repository-defined pairing; and
+- the final diff contains only in-scope documentation changes (plus the requested implementation or
+  tests) and records checks that were unavailable as **not tested**.
+
+Stop and ask when the authoritative behavior, intended audience, language policy, or requested
+documentation surface is materially ambiguous. Do not invent contracts, silently broaden scope, or
+rewrite history to make documentation appear complete.
