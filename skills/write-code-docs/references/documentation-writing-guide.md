@@ -13,6 +13,21 @@ localized language, ask the user before creating or changing documentation. Once
 English file and localized translation semantically aligned; preserve code, commands, identifiers, and
 links exactly.
 
+## Translation fidelity
+
+English-first serves Agent discovery and gives reviewers a stable source of truth. It does not permit
+the localized version to become an adaptation. Translate the complete English block faithfully, then
+review both blocks for:
+
+- omitted or added claims, qualifiers, examples, or constraints;
+- changed negation, certainty, obligation, permission, quantity, or conditional scope;
+- inconsistent terminology for the same concept; and
+- altered code tokens, paths, commands, identifiers, links, or error codes.
+
+Idiomatic grammar is welcome, but technical meaning must not be softened, strengthened, or editorialized.
+When the English source is ambiguous, flag the ambiguity or ask the user instead of resolving it silently.
+Human review evaluates fidelity and readability; it is not a license for an independent rewrite.
+
 ## Agent instruction documents
 
 `AGENTS.md` is a documentation surface and may be authoritative. Write its rules as explicit,

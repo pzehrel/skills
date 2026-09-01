@@ -23,8 +23,11 @@ user's request; do not assume Chinese, the user's language, or another default, 
 when the evidence does not identify it.
 English comes first because an Agent is the primary reader; a human reviewer should then be able to read
 both complete blocks and judge whether the documentation is correct and useful. The localized block is
-not a summary or afterthought. This skill does not authorize publishing, changing APIs, or adding
-unrelated instructions.
+not a summary or afterthought. English-first is an ordering and source-of-truth decision, not permission
+to rewrite for a different audience: the localized block must be a complete, faithful translation that
+preserves claims, modality, conditions, examples, and emphasis. Natural grammar and idiomatic phrasing
+are allowed only when they do not add, omit, soften, strengthen, or otherwise change technical meaning.
+This skill does not authorize publishing, changing APIs, or adding unrelated instructions.
 
 ## Inspect before writing
 
@@ -47,6 +50,9 @@ can follow the surrounding convention directly.
 - Write every explanatory comment or docstring in English followed by the complete localized-language
   counterpart. Do not interleave languages sentence by sentence; keep the two complete blocks adjacent
   so they cannot drift.
+- Treat translation as a fidelity check, not a second authoring pass. Compare the two blocks for
+  omissions, additions, changed negation or modality, altered conditions, and inconsistent terminology;
+  when the English source is ambiguous, flag or ask rather than silently resolving it in translation.
 - Comment the semantic contract: purpose, preconditions, invariants, side effects, ordering,
   ownership or lifetime, failure behavior, units, compatibility constraints, and the reason behind
   a non-obvious choice.
