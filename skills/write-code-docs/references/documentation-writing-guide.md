@@ -36,6 +36,11 @@ separate from project background and temporary status. This writing guide covers
 coverage, and bilingual presentation; a repository's instruction-maintenance workflow remains the
 authority for admitting rules and changing hierarchy or scope.
 
+The canonical `AGENTS.md` stays in English for Agent consumption. Put the precise human-review
+translation in the repository's localized counterpart, such as `AGENTS.zh-CN.md`, and link it when
+useful. A localized counterpart is not automatically authoritative or discoverable; only treat it as
+loaded instructions when the relevant harness documents that behavior.
+
 ## Semantic comment coverage
 
 For every consumer-visible code element, check the declaration, schema, or behavior a reader actually
@@ -73,6 +78,22 @@ structurally singular:
  * @returns A validated configuration. 已校验的配置。
  */
 ```
+
+## Markdown localization layout
+
+Markdown localization uses separate files by default. Keep one prose language per file:
+
+```text
+README.md
+README.<locale>.md
+docs/configuration.md
+docs/configuration.<locale>.md
+```
+
+Follow an established locale directory convention when one exists. The English and localized files
+must have equivalent headings, tables, links, examples, code blocks, conditions, and safety boundaries.
+Do not copy the code-comment layout into Markdown by alternating English and localized paragraphs in
+one file. Inline bilingual Markdown is an exception that requires an explicit repository or user rule.
 
 ## Markdown structure
 

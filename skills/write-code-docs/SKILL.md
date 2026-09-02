@@ -1,6 +1,6 @@
 ---
 name: write-code-docs
-description: Write and review clear, behavior-accurate bilingual code comments, API documentation, AGENTS.md files, README files, guides, examples, and other Markdown docs in English plus the repository's localized language. Use when code or an agent- or user-facing workflow needs explanation, contract documentation, or synchronized examples; infer the localized language from repository evidence or ask when it is ambiguous.
+description: Write and review clear, behavior-accurate bilingual code comments and separately localized AGENTS.md files, API documentation, README files, guides, examples, and other Markdown docs in English plus the repository's localized language. Use when code or an agent- or user-facing workflow needs explanation, contract documentation, or synchronized examples; infer the localized language from repository evidence or ask when it is ambiguous.
 license: MIT
 metadata:
   repository: https://github.com/pzehrel/skills
@@ -29,6 +29,16 @@ preserves claims, modality, conditions, examples, and emphasis. Natural grammar 
 are allowed only when they do not add, omit, soften, strengthen, or otherwise change technical meaning.
 This skill does not authorize publishing, changing APIs, or adding unrelated instructions.
 
+Keep the two artifact modes distinct:
+
+- **Code comments and docstrings:** place the complete English block and its complete localized
+  translation together at the same code location.
+- **Markdown documents:** keep English and localized prose in separate complete files by default. Use
+  the repository's locale naming or directory convention, such as `README.md` plus
+  `README.zh-CN.md`. Do not alternate languages paragraph by paragraph, duplicate tables, or repeat
+  code blocks inside one Markdown file unless the repository or user explicitly requires an inline
+  bilingual document.
+
 ## Inspect before writing
 
 1. Read the effective repository instructions and the nearest existing documentation with the same
@@ -36,8 +46,10 @@ This skill does not authorize publishing, changing APIs, or adding unrelated ins
 2. Determine the behavior or workflow that changed, the authoritative source (code, types, tests,
    configuration, or command output), the intended reader, and the smallest documentation surface
    that should change.
-3. Determine the repository's localized language before writing; English remains the canonical first
-   language. Check existing names, links, terminology, examples, version scope, and deprecation policy.
+3. Classify each target as an in-code comment/docstring or a standalone Markdown document, then use
+   the corresponding bilingual layout above. Determine the repository's localized language before
+   writing; English remains the canonical first language. Check existing names, links, terminology,
+   examples, version scope, and deprecation policy.
    Preserve unrelated edits and do not duplicate a contract in competing authoritative locations.
 
 For detailed comment and Markdown patterns, read
@@ -77,10 +89,14 @@ can follow the surrounding convention directly.
 - Treat `AGENTS.md` and other agent-instruction Markdown as a documentation surface. Keep each rule
   explicit about its trigger, action, exceptions, and verification; separate durable rules from project
   background and temporary status. If the task changes rule admission, hierarchy, or scope, follow the
-  repository's instruction-maintenance workflow in addition to this writing guidance.
-- Publish every changed human-facing Markdown page, README section, example explanation, and changelog
-  entry in English plus the inferred localized language. Preserve semantic parity, links, commands,
-  identifiers, code, and safety boundaries; do not invent a localized language without evidence.
+  repository's instruction-maintenance workflow in addition to this writing guidance. Keep the
+  canonical `AGENTS.md` in English and place its faithful human-review translation in the repository's
+  localized counterpart; do not assume a harness loads the localized file unless its discovery rules
+  explicitly say so.
+- Maintain every changed Markdown page as a complete English file plus a complete localized counterpart.
+  Preserve semantic parity, headings, links, commands, identifiers, code, tables, examples, and safety
+  boundaries across the pair; do not mix both prose languages inside the canonical file or invent a
+  localized language without evidence.
 - Start with the reader's goal and shortest successful path. State prerequisites, supported scope,
   expected result, important limitations, and recovery or troubleshooting paths when relevant.
 - Use headings and links to route by intent. Keep README material orienting and self-contained; move
@@ -110,6 +126,9 @@ Before reporting completion, verify that:
 - public API coverage includes the relevant parameters, returns, failures, overloads, and deprecations;
 - no stale names, duplicated authority, broken links, or planned behavior presented as shipped remain;
 - English and localized-language counterparts remain semantically aligned;
+- standalone Markdown uses separate English and localized files unless an explicit inline-bilingual
+  convention applies; no accidental paragraph-by-paragraph, table-by-table, or code-block duplication
+  remains in one file;
 - every consumer-visible declaration or structured element has semantic coverage for its applicable
   inputs, fields, variants, outputs, defaults, failures, lifecycle, side effects, and constraints;
 - every changed explanatory comment and human-facing documentation surface exists in English followed
