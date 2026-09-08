@@ -46,8 +46,9 @@ loaded instructions when the relevant harness documents that behavior.
 For every consumer-visible code element, check the declaration, schema, or behavior a reader actually
 sees. This includes functions, classes, methods, constructors, fields, properties, types, enum variants,
 events, commands, configuration keys, schemas, and state transitions. Write the explanatory comment or
-docstring in English first and then the complete localized-language counterpart. Do not interleave
-sentences from the two languages.
+docstring as a complete English block, then one blank line, then the complete localized-language
+counterpart. Start the localized block directly without a language label such as `Chinese:` or `中文：`.
+Do not interleave sentences from the two languages.
 
 A useful comment normally has a summary and, where applicable, explains:
 
@@ -59,12 +60,13 @@ A useful comment normally has a summary and, where applicable, explains:
 - relationships between generic values, overloads, states, or related declarations.
 
 Use the project's established syntax. Structured tags supplied by a language or tool (such as JSDoc or
-TSDoc) are delivery aids, not the source of truth. Keep structured fields unique, put English and
-localized-language text in each field's description, and ensure the prose remains complete when those
-tags are ignored. Do not merely restate types or signatures.
+TSDoc) are delivery aids, not the source of truth. Keep structured fields unique; in each field's
+description, put the English text first, then one blank line, then the localized-language text without
+a language label. Ensure the prose remains complete when those tags are ignored. Do not merely restate
+types or signatures.
 
-For example, keep English prose first, followed by the complete localized-language prose, and keep tags
-structurally singular:
+For example, keep English prose first, followed by one blank line and the complete localized-language
+prose without a language label, and keep tags structurally singular:
 
 ```ts
 /**
@@ -74,8 +76,12 @@ structurally singular:
  * 加载配置文件并校验其 schema。
  * 返回对象与解析器的内部状态分离。
  *
- * @param path Path to the configuration file. 配置文件路径。
- * @returns A validated configuration. 已校验的配置。
+ * @param path Path to the configuration file.
+ *
+ *   配置文件路径。
+ * @returns A validated configuration.
+ *
+ *   已校验的配置。
  */
 ```
 

@@ -1,12 +1,52 @@
 ---
 name: maintain-js-package-docs
-description: Maintain agent-readable, JSDoc-first public API comments and version-aligned README, bundled docs, and examples while implementing or reviewing features, fixes, refactors, or releases in publishable JavaScript or TypeScript libraries and npm packages. Use proactively whenever work can affect package exports, public APIs, behavior, defaults, errors, deprecations, examples, or packaging—even when documentation is not requested; skip app-only code and private modules without a public package contract.
+description: Maintain JSDoc-first API docs, README, examples, and bundled docs for publishable JavaScript or TypeScript packages. Use when public contracts change; skip app-only or private modules.
 license: MIT
 metadata:
+  author: "Pzehrel <author@example.com>"
+  tags:
+    - javascript
+    - typescript
+    - jsdoc
+    - npm
   repository: https://github.com/pzehrel/skills
+version: 1.0.0
 ---
 
 # Maintain JS Package Docs
+
+## Purpose
+
+Use this skill to keep a package's public API, implementation behavior, declarations, README, examples, and published documentation consistent.
+
+## Instructions
+
+1. Inspect package metadata, public entry points, declarations, tests, README, and relevant examples.
+2. Identify the observable contract change before editing documentation.
+3. Update implementation, API comments, bundled docs, and examples together when they describe the same behavior.
+4. Run the repository's applicable checks and inspect the packed artifact when publication is in scope.
+
+## Examples
+
+Example: when an exported function gains an option, update its JSDoc parameter/default/error semantics, declarations, README usage, examples, and any migration note, then run the package checks.
+
+## Requirements
+
+- A publishable JavaScript or TypeScript package with `package.json` and public entry points.
+- The repository's configured tests, type checks, documentation checks, and package-manager commands.
+- A generated declaration surface or source types when the package publishes types.
+
+## Limitations
+
+- Do not publish, change release configuration, or broaden package contents without explicit authorization.
+- Do not document private modules or planned behavior as part of the public contract.
+- `llms.txt` or custom metadata is not authoritative unless the target toolchain explicitly implements it.
+
+## Troubleshooting
+
+- Stale API docs: compare the public declaration surface with exports and regenerate before editing prose.
+- `npm pack --dry-run` mismatch: inspect package include/exclude rules and verify the packed artifact.
+- JSDoc or type-check failure: fix the source-of-truth contract first, then update all dependent examples.
 
 Apply the agent-readable package documentation specification while developing the package. Treat
 documentation as part of the public contract and complete the implementation and every affected

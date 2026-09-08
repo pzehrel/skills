@@ -1,12 +1,51 @@
 ---
 name: maintain-agents-md
-description: Create, update, reorganize, or audit repository AGENTS.md guidance so durable agent rules remain scoped, concise, verifiable, and progressively disclosed. Use when adding repository instructions, recording a lasting working convention, splitting oversized guidance into policy documents, or reviewing an instruction hierarchy.
+description: Create and audit scoped, verifiable AGENTS.md hierarchies and route durable rules into repository policy documents. Use for repository guidance; not for temporary notes.
 license: MIT
 metadata:
+  author: "Pzehrel <author@example.com>"
+  tags:
+    - agents-md
+    - repository-guidance
+    - governance
   repository: https://github.com/pzehrel/skills
+version: 1.0.0
 ---
 
 # Maintain AGENTS.md
+
+## Purpose
+
+Use this skill to keep repository instructions durable, narrowly scoped, discoverable, and verifiable without turning temporary context into policy.
+
+## Instructions
+
+1. Inspect the effective instruction hierarchy and repository evidence before editing.
+2. Place each durable rule in the narrowest authoritative document and add precise routing.
+3. Reconcile duplicates or conflicts instead of appending another copy.
+4. Validate links, scope, language counterparts, and the final diff before reporting.
+
+## Examples
+
+Example: when a repository needs a lasting release rule, add it to the relevant `.agents/rules/` policy, route it from `AGENTS.md`, and verify that unrelated projects do not load it.
+
+## Requirements
+
+- A repository root and the effective `AGENTS.md` hierarchy.
+- Access to the repository's documentation, link, or formatting checks when available.
+- Explicit user authorization for durable policy changes when the task does not already require them.
+
+## Limitations
+
+- Do not modify user or global instructions, secrets, prompts, or temporary task notes.
+- Do not broaden a local rule into repository-wide policy without evidence and authorization.
+- Do not push, create a pull request, or change unrelated files as part of maintenance.
+
+## Troubleshooting
+
+- Rule conflicts: identify the higher-priority source and reconcile rather than duplicate.
+- Ambiguous scope: stop and ask which path or project the rule governs.
+- Broken route or link: verify the target path from the repository root and update both language files.
 
 Build an instruction hierarchy that future agents can discover cheaply and apply correctly. Keep
 `AGENTS.md` focused on routing and true always-on constraints. Put detailed repository-specific

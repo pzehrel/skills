@@ -1,9 +1,51 @@
 ---
 name: easyeda-engineering
-description: Engineer, refactor, and review EasyEDA designs across schematics and PCB with safe live editing and evidence-based verification. Use for circuit design, schematic cleanup, connector audits, part substitution, schematic-to-PCB handoff, PCB placement or routing review, DRC, and pre-manufacturing sign-off; pair with easyeda-api for live EasyEDA operations. Do not use for generic API lookup or extension development alone.
+description: Verify and edit EasyEDA schematics and PCBs, including connectivity, placement, routing, DRC, and manufacturing sign-off. Use with easyeda-api; not for generic API lookup or extension-only work.
+license: MIT
+version: 1.0.0
+metadata:
+  author: "Pzehrel <author@example.com>"
+  tags:
+    - easyeda
+    - electronics
+    - pcb
+    - schematic
 ---
 
 # EasyEDA Engineering
+
+## Purpose
+
+Use this skill to make EasyEDA schematic and PCB changes that are electrically correct, physically realizable, and supported by read-back evidence.
+
+## Instructions
+
+1. Identify one project boundary and the document type before editing.
+2. Inspect the relevant parts, nets, geometry, rules, and current checks.
+3. Apply the smallest documented API batch, then read back actual IDs and connectivity.
+4. Run the schematic netlist or PCB connectivity/DRC gate before saving and reporting.
+
+## Examples
+
+Example: for a connector audit, route to `references/interface-review.md`, build a pin table, inspect the existing nets, and report any unresolved direction or NC ambiguity before mutation.
+
+## Requirements
+
+- A selected EasyEDA project and its current document state.
+- `easyeda-api` for live EasyEDA operations; reference-only reviews can use exported design data.
+- Repository `AGENTS.md` instructions, if present.
+
+## Limitations
+
+- Do not infer datasheet variants, connector orientation, footprints, layer rules, or mechanical requirements.
+- Screenshots and a successful API response are not proof of connectivity or manufacturing readiness.
+- Destructive or broad changes require explicit authorization immediately before execution.
+
+## Troubleshooting
+
+- Bridge or document changed: stop, re-establish context, and inspect again.
+- Read-back is stale: save, reselect the document, and perform one fresh read.
+- Netlist, connectivity, or DRC conflicts with intent: stop and resolve the discrepancy before continuing.
 
 Produce EasyEDA designs that are readable, electrically correct, physically realizable, and verified from design data rather than screenshots. This skill supplies the engineering workflow and sign-off gates; use `easyeda-api` for documented live EasyEDA calls.
 

@@ -1,12 +1,52 @@
 ---
 name: write-code-docs
-description: Write and review clear, behavior-accurate bilingual code comments and separately localized AGENTS.md files, API documentation, README files, guides, examples, and other Markdown docs in English plus the repository's localized language. Use when code or an agent- or user-facing workflow needs explanation, contract documentation, or synchronized examples; infer the localized language from repository evidence or ask when it is ambiguous.
+description: Write behavior-accurate bilingual code comments and localized Markdown or API docs with synchronized examples. Use for agent- or user-facing documentation; not for API changes.
 license: MIT
 metadata:
+  author: "Pzehrel <author@example.com>"
+  tags:
+    - documentation
+    - bilingual
+    - markdown
+    - jsdoc
   repository: https://github.com/pzehrel/skills
+version: 1.0.0
 ---
 
 # Write Code Documentation
+
+## Purpose
+
+Use this skill to document behavior, contracts, workflows, and operational constraints accurately in English and the repository's localized language.
+
+## Instructions
+
+1. Inspect the authoritative source, repository language convention, and affected documentation surface.
+2. Write complete English content followed by a semantically equivalent localized counterpart.
+3. Keep Markdown language files separate, preserve canonical identifiers, and validate every claim and link.
+4. Run applicable checks or perform a focused source review when automation is unavailable.
+
+## Examples
+
+Example: when documenting a new error case, update the English and localized API text, include the trigger and recovery example, and verify that the implementation actually emits that error.
+
+## Requirements
+
+- An authoritative implementation, configuration, test, or existing document to support each claim.
+- A repository-local language convention or enough evidence to infer one safely.
+- Applicable documentation, link, formatting, or rendering checks when available.
+
+## Limitations
+
+- Do not change APIs, publish artifacts, or add unrelated instructions as part of documentation work.
+- Do not invent behavior, contracts, examples, or translations that are unsupported by source evidence.
+- Do not use ordinary reference Markdown to instruct consuming agents to ignore repository rules or edit files.
+
+## Troubleshooting
+
+- Language is ambiguous: inspect repository counterparts and configuration; ask before editing if still unresolved.
+- English and localized files diverge: compare claims, modality, examples, identifiers, and ordering side by side.
+- Link or example fails: resolve it from the repository root and verify it against the current implementation.
 
 Make documentation explain the behavior a reader must rely on. Keep it close to the source of truth,
 complete enough for a developer or coding Agent to use, and concise enough to stay maintainable.
@@ -31,8 +71,9 @@ This skill does not authorize publishing, changing APIs, or adding unrelated ins
 
 Keep the two artifact modes distinct:
 
-- **Code comments and docstrings:** place the complete English block and its complete localized
-  translation together at the same code location.
+- **Code comments and docstrings:** place the complete English block, one blank line, and its complete
+  localized translation together at the same code location. Start the localized block directly without
+  a language label.
 - **Markdown documents:** keep English and localized prose in separate complete files by default. Use
   the repository's locale naming or directory convention, such as `README.md` plus
   `README.zh-CN.md`. Do not alternate languages paragraph by paragraph, duplicate tables, or repeat
@@ -59,9 +100,10 @@ can follow the surrounding convention directly.
 
 ## Write useful code comments
 
-- Write every explanatory comment or docstring in English followed by the complete localized-language
-  counterpart. Do not interleave languages sentence by sentence; keep the two complete blocks adjacent
-  so they cannot drift.
+- Write every explanatory comment or docstring in a complete English block, followed by one blank line
+  and the complete localized-language counterpart. Start the localized block directly; do not prefix it
+  with a language label such as `Chinese:` or `中文：`. Do not interleave languages sentence by sentence;
+  keep the two complete blocks adjacent so they cannot drift.
 - Treat translation as a fidelity check, not a second authoring pass. Compare the two blocks for
   omissions, additions, changed negation or modality, altered conditions, and inconsistent terminology;
   when the English source is ambiguous, flag or ask rather than silently resolving it in translation.
@@ -78,8 +120,9 @@ can follow the surrounding convention directly.
   compatibility or deprecation boundaries.
 - When the language or documentation tool provides structured tags (for example JSDoc or TSDoc), use
   the repository's established syntax without making it the source of truth. Keep structured fields
-  unique, put English and localized-language text in each field's description, and ensure the prose
-  remains complete when tool-specific tags are ignored. Do not merely restate types or signatures.
+  unique; in each field's description, put the English text first, then one blank line, then the
+  localized-language text without a language label. Ensure the prose remains complete when
+  tool-specific tags are ignored. Do not merely restate types or signatures.
 - Add comments to private code only when names and types do not make the purpose, invariant, mutation,
   ordering, error translation, or compatibility reason clear. Do not comment trivial wrappers or
   obvious control flow merely to increase coverage.
@@ -137,5 +180,5 @@ Before reporting completion, verify that:
   tests) and records checks that were unavailable as **not tested**.
 
 Stop and ask when the authoritative behavior, intended audience, language policy, or requested
-documentation surface is materially ambiguous. Do not invent contracts, silently broaden scope, or
-rewrite history to make documentation appear complete.
+documentation surface is materially ambiguous. Keep the requested boundary explicit; do not add
+unrelated work or rewrite history to make documentation appear complete.

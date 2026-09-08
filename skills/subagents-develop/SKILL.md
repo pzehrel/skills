@@ -1,14 +1,48 @@
 ---
 name: subagents-develop
-description: Dispatch independent development tasks in parallel. Use for coding, fixes, or refactors that benefit from multiple sessions or isolation from the current checkout; develop in isolated branch and worktree namespaces, fan out to multiple agents only when tasks are safely parallel, and converge all results. Merging into the main branch requires an explicit user command.
+description: Orchestrate independent coding tasks with isolated Git branches and worktrees. Use when parallel or isolated development helps; main-branch merges require explicit authorization.
 license: MIT
 metadata:
+  author: "Pzehrel <author@example.com>"
+  tags:
+    - subagents
+    - git
+    - worktrees
+    - orchestration
   repository: https://github.com/pzehrel/skills
+version: 1.0.0
 ---
 
 # Subagent Development Orchestration
 
-Treat the current agent as an independent lead agent. The user only needs to assign work and need not manage the current Git state; they may open multiple sessions sequentially and dispatch different tasks. After receiving a task, the lead agent owns decomposition, serial and parallel scheduling, Git isolation, integration, and resource cleanup. **Git isolation rules—namespace, worktrees, handoff, cleanup, and main-branch discipline—are mandatory; subagent fan-out is optional.** Fan out only when the task benefits from parallelism. Otherwise, develop directly in the parent worktree. Multiple lead agents may operate in the same repository concurrently, but each may manage only its own fully isolated namespace.
+## Purpose
+
+Coordinate isolated development within Git boundaries.
+
+## Instructions
+
+1. Inspect repository instructions and confirm the main branch.
+2. Decide whether parallelism is safe; keep serial work in the parent worktree.
+3. Dispatch isolated tasks and review each result.
+4. Integrate valid changes, verify cleanup, and report the final branch state.
+
+## Examples
+
+Example: split independent documentation and test updates into worktrees, integrate valid results, and leave main unchanged.
+
+## Requirements
+
+- Confirmed repository root, main branch, base commit, and Git worktree support; authorization for main-branch or remote actions.
+
+## Limitations
+
+- Do not modify another lead agent's resources or discard uncommitted work; preserve failed resources for recovery.
+
+## Troubleshooting
+
+- Unknown main branch: stop. Failed child or check: preserve resources, repair safely, and report the blocker.
+
+Treat the current agent as lead. Own decomposition, scheduling, isolation, integration, and cleanup; fan out only when safe. Multiple leads may share a repository, but each manages only its own namespace.
 
 ## Overall workflow
 
@@ -196,7 +230,7 @@ Follow `references/merge-to-main.md` exactly for the complete missed-resource au
 - If the user interrupts the task, stop new dispatches and preserve every branch and worktree not yet integrated safely.
 - If another lead agent's branch or worktree is found, identify it read-only; do not modify, merge, or clean it.
 
-Preserving resources takes precedence over the appearance of complete cleanup. Automatically delete only child resources that were integrated successfully.
+Preserving resources takes precedence over the appearance of complete cleanup. Delete child resources only after verifying that they were integrated successfully and are no longer needed.
 
 ## End state and reporting
 
