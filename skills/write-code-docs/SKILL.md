@@ -1,23 +1,25 @@
 ---
 name: write-code-docs
-description: Write behavior-accurate bilingual code comments and localized Markdown or API docs with synchronized examples. Use for agent- or user-facing documentation; not for API changes.
+description: Add or review behavior-accurate bilingual comments and docstrings during implementation, refactoring, bug fixes, and code review, including private or internal symbols and complex logic. Also maintain localized Markdown or API docs with synchronized examples; use when code changes need explanatory documentation, not for API design alone.
 license: MIT
 metadata:
   author: "Pzehrel <author@example.com>"
   tags:
     - documentation
+    - code-comments
+    - code-review
+    - implementation
     - bilingual
     - markdown
     - jsdoc
   repository: https://github.com/pzehrel/skills
-version: 1.0.0
 ---
 
 # Write Code Documentation
 
 ## Purpose
 
-Use this skill to document behavior, contracts, workflows, and operational constraints accurately in English and the repository's localized language.
+Use this skill to document behavior, contracts, workflows, and operational constraints accurately in English and the repository's localized language, including non-obvious private code and complex implementation blocks.
 
 ## Instructions
 
@@ -26,9 +28,21 @@ Use this skill to document behavior, contracts, workflows, and operational const
 3. Keep Markdown language files separate, preserve canonical identifiers, and validate every claim and link.
 4. Run applicable checks or perform a focused source review when automation is unavailable.
 
+## When to Apply During Coding
+
+Apply this skill proactively when implementing, refactoring, debugging, or reviewing code that adds or
+changes behavior. Do not wait for the request to contain words such as “document,” “comment,” or “docs.”
+After understanding the code change, document the affected public and private symbols and any complex
+implementation blocks that a future maintainer would need to understand. For a trivial change whose
+purpose and effects are already obvious, do not add commentary solely because this skill was selected.
+
 ## Examples
 
 Example: when documenting a new error case, update the English and localized API text, include the trigger and recovery example, and verify that the implementation actually emits that error.
+
+Example: when a private helper contains a bounded retry loop with cleanup, document the retry bound,
+backoff, cleanup ordering, and the reason those choices protect the surrounding state. Comment the loop
+or helper beside the code even if the helper's name and signature are clear.
 
 ## Requirements
 
@@ -114,7 +128,8 @@ can follow the surrounding convention directly.
   a non-obvious choice.
 - Keep comments attached to the declaration or code they describe. Prefer one authoritative comment
   over repeated copies; link to deeper documentation when the explanation is large.
-- For every consumer-visible code element—not only functions, but also classes, methods, constructors,
+- Cover the whole relevant implementation, not only exported functions. For every consumer-visible code
+  element—not only functions, but also classes, methods, constructors,
   fields, properties, types, enum variants, events, commands, configuration keys, schemas, and state
   transitions—document each part that is not unambiguous from its name or declaration. Explain the
   semantic role of every input, field, option, or variant; optionality and defaults; units and valid
@@ -125,9 +140,18 @@ can follow the surrounding convention directly.
   unique; in each field's description, put the English text first, then one blank line, then the
   localized-language text without a language label. Ensure the prose remains complete when
   tool-specific tags are ignored. Do not merely restate types or signatures.
-- Add comments to private code only when names and types do not make the purpose, invariant, mutation,
-  ordering, error translation, or compatibility reason clear. Do not comment trivial wrappers or
-  obvious control flow merely to increase coverage.
+- Include private and internal code in the coverage review. Add a bilingual comment to a private
+  declaration or implementation block when it carries a non-obvious purpose, invariant, mutation,
+  ordering requirement, error translation, compatibility reason, resource/lifecycle rule, or
+  performance or security constraint. This includes complex algorithms, state transitions, nested
+  branching, loops whose bounds or exit conditions matter, data transformations, regular expressions,
+  non-obvious constants, synchronization or retry logic, and cleanup paths—not just functions or
+  exported symbols. Place the comment next to the smallest block that needs the explanation and state
+  why the code is shaped that way. Do not comment trivial wrappers, direct assignments, or obvious
+  control flow merely to increase coverage.
+- Perform a coverage pass over both exported and private symbols, then a complexity pass over the
+  implementation body. A private helper may need documentation even when its signature is clear if
+  its algorithm or interaction with surrounding state is not.
 
 ## Write Markdown and examples
 

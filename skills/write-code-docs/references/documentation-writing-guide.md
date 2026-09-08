@@ -43,9 +43,10 @@ loaded instructions when the relevant harness documents that behavior.
 
 ## Semantic comment coverage
 
-For every consumer-visible code element, check the declaration, schema, or behavior a reader actually
-sees. This includes functions, classes, methods, constructors, fields, properties, types, enum variants,
-events, commands, configuration keys, schemas, and state transitions. Write the explanatory comment or
+Check the whole relevant implementation, not only exported functions. For every consumer-visible code
+element, check the declaration, schema, or behavior a reader actually sees. This includes functions,
+classes, methods, constructors, fields, properties, types, enum variants, events, commands,
+configuration keys, schemas, and state transitions. Write the explanatory comment or
 docstring as a complete English block, then one blank line, then the complete localized-language
 counterpart inside the same comment or docstring block. Start the localized block directly without a
 language label such as `Chinese:` or `中文：`. Do not split the two languages across adjacent comment
@@ -59,6 +60,15 @@ A useful comment normally has a summary and, where applicable, explains:
 - outputs, identity, caching, resource cleanup, and result representation;
 - failures, rejected combinations, security constraints, and compatibility boundaries; and
 - relationships between generic values, overloads, states, or related declarations.
+
+Review private and internal code as well. Add comments to private declarations or implementation blocks
+when their purpose, invariant, mutation, ordering, error translation, compatibility, resource/lifecycle,
+performance, or security constraint is not obvious from the local code. Annotate complex algorithms,
+state transitions, nested branches, meaningful loop bounds or exits, data transformations, regular
+expressions, non-obvious constants, synchronization or retry logic, and cleanup paths. Put the comment
+next to the smallest block that needs it and explain why the code is shaped that way. Skip trivial
+wrappers, direct assignments, and obvious control flow. Run a coverage pass over exported and private
+symbols, followed by a complexity pass over implementation bodies.
 
 Use the project's established syntax. Structured tags supplied by a language or tool (such as JSDoc or
 TSDoc) are delivery aids, not the source of truth. Keep structured fields unique; in each field's
