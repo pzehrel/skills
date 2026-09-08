@@ -72,8 +72,9 @@ This skill does not authorize publishing, changing APIs, or adding unrelated ins
 Keep the two artifact modes distinct:
 
 - **Code comments and docstrings:** place the complete English block, one blank line, and its complete
-  localized translation together at the same code location. Start the localized block directly without
-  a language label.
+  localized translation inside one comment or docstring block at the same code location. Start the
+  localized block directly without a language label. Do not split the two languages across adjacent
+  `/** ... */` or `/* ... */` blocks.
 - **Markdown documents:** keep English and localized prose in separate complete files by default. Use
   the repository's locale naming or directory convention, such as `README.md` plus
   `README.zh-CN.md`. Do not alternate languages paragraph by paragraph, duplicate tables, or repeat
@@ -102,8 +103,9 @@ can follow the surrounding convention directly.
 
 - Write every explanatory comment or docstring in a complete English block, followed by one blank line
   and the complete localized-language counterpart. Start the localized block directly; do not prefix it
-  with a language label such as `Chinese:` or `中文：`. Do not interleave languages sentence by sentence;
-  keep the two complete blocks adjacent so they cannot drift.
+  with a language label such as `Chinese:` or `中文：`. Keep both blocks inside the same comment or
+  docstring delimiters; do not create a second adjacent comment for the localized text. Do not interleave
+  languages sentence by sentence; keep the two complete blocks adjacent so they cannot drift.
 - Treat translation as a fidelity check, not a second authoring pass. Compare the two blocks for
   omissions, additions, changed negation or modality, altered conditions, and inconsistent terminology;
   when the English source is ambiguous, flag or ask rather than silently resolving it in translation.
@@ -176,6 +178,8 @@ Before reporting completion, verify that:
   inputs, fields, variants, outputs, defaults, failures, lifecycle, side effects, and constraints;
 - every changed explanatory comment and human-facing documentation surface exists in English followed
   by the inferred localized language, with the repository-defined pairing; and
+- every bilingual code comment keeps both language blocks inside one comment or docstring block rather
+  than splitting them across adjacent comment blocks; and
 - the final diff contains only in-scope documentation changes (plus the requested implementation or
   tests) and records checks that were unavailable as **not tested**.
 

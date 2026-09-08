@@ -47,8 +47,9 @@ For every consumer-visible code element, check the declaration, schema, or behav
 sees. This includes functions, classes, methods, constructors, fields, properties, types, enum variants,
 events, commands, configuration keys, schemas, and state transitions. Write the explanatory comment or
 docstring as a complete English block, then one blank line, then the complete localized-language
-counterpart. Start the localized block directly without a language label such as `Chinese:` or `中文：`.
-Do not interleave sentences from the two languages.
+counterpart inside the same comment or docstring block. Start the localized block directly without a
+language label such as `Chinese:` or `中文：`. Do not split the two languages across adjacent comment
+blocks, and do not interleave sentences from the two languages.
 
 A useful comment normally has a summary and, where applicable, explains:
 
