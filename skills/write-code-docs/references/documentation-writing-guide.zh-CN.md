@@ -37,6 +37,43 @@
 docstring 块中写本地化语言的完整对应版本。本地化语言块直接开始，不要添加诸如 `Chinese:` 或 `中文：` 的语言标签。不要把两种语言拆到
 相邻注释块中，也不要交错两种语言的句子。
 
+如果字段/成员的完整双语文本一行即可容纳，可以使用下文所述的紧凑形式；这只是格式例外，不降低语义覆盖要求。函数和方法文档仍应保持足够详细，
+覆盖签名中的每个字段。
+
+### 函数签名覆盖
+
+对于每个消费者可见的函数、方法、构造器、回调、命令处理器或其他可调用对象，都要在声明处记录签名契约。逐项覆盖每个参数和返回值；函数摘要、
+参数名或类型标注本身都不够。适用时说明每个参数的角色、接受的形状或约束、可选性/可空性、默认值、单位、所有权/可变性，以及取消或时序行为。
+说明返回值的含义和形状、身份/所有权、同步或异步行为、副作用、顺序，以及失败或拒绝输入的行为。记录重载差异和泛型关系。
+
+支持结构化标签时，每个参数、返回值和抛出错误各使用一个唯一条目，并在该条目中同时保留完整的英语和本地化语言描述。参数名、标签名和类型 token
+保持不变。不支持结构化标签的语言，使用已有的 docstring 参数/返回/异常章节或最接近的等价形式；不要因为语法不同而省略契约。
+
+例如，TypeScript 可调用对象应记录签名的每个字段，而不只是摘要：
+
+```ts
+/**
+ * Sends a request using the supplied retry policy.
+ *
+ * 使用给定的重试策略发送请求。
+ *
+ * @param url Request URL; must use an allowed HTTPS origin.
+ *
+ *   请求 URL；必须使用允许的 HTTPS 来源。
+ * @param options Retry limits and delays. Omit to use the defaults.
+ *
+ *   重试次数和延迟配置。省略时使用默认值。
+ * @returns The parsed response body; the promise rejects on transport or validation failure.
+ *
+ *   解析后的响应正文；传输或校验失败时 promise 会拒绝。
+ */
+async function sendRequest(url: string, options?: RetryOptions): Promise<unknown> {
+  // ...
+}
+```
+
+不要只重复 `url: string` 或 `Promise<unknown>`；上面的描述补充了签名无法表达的约束、默认值、结果语义和失败行为。
+
 ### 文件级头部
 
 每个新建或实质性修改的代码文件（源代码、可执行脚本、配置或 schema）都应在文件顶部添加一段简洁的双语头部。头部放在导入和声明之前，
@@ -89,6 +126,39 @@ import { validate } from './validation';
 struct 字段注释、Java/Kotlin/C# 属性或 record 组件注释，或 OpenAPI/JSON Schema/protobuf/SQL/配置元数据中的 description。如果格式
 无法将描述附加到字段，就在最近的权威 schema/表格/参考文档中记录字段，并从声明处链接或保持同步。不要因为字段看起来不言自明就跳过；
 只有遵循仓库约定的真正私有简单字段才可省略。
+
+当字段/成员的完整说明一行即可容纳时，使用该语言/工具合法的紧凑单行形式。两种语言短语必须位于同一注释中，并用清晰分隔符隔开，例如：
+
+```ts
+interface UserOptions {
+  /** Display label shown in the UI — 在界面中显示的标签 */
+  label: string;
+}
+```
+
+TypeScript/JavaScript 之外使用相同原则但采用不同语法：
+
+```go
+type UserOptions struct {
+	// Display label shown in the UI — 在界面中显示的标签
+	Label string
+}
+```
+
+```rust
+struct UserOptions {
+    /// Display label shown in the UI — 在界面中显示的标签
+    label: String,
+}
+```
+
+```python
+@dataclass
+class UserOptions:
+    label: str  # Display label shown in the UI — 在界面中显示的标签
+```
+
+不支持 `/** ... */` 的语言不得强行使用它。当字段的约束、默认值、关系或其他细节无法一行容纳时，改用多行双语块。
 
 例如，每个 TypeScript 属性都应有自己的双语块，而不能只依赖 interface 注释：
 

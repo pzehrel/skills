@@ -52,6 +52,52 @@ counterpart inside the same comment or docstring block. Start the localized bloc
 language label such as `Chinese:` or `中文：`. Do not split the two languages across adjacent comment
 blocks, and do not interleave sentences from the two languages.
 
+For a concise field/member whose complete bilingual text fits on one line, the compact form described
+below is allowed; this formatting exception does not reduce semantic coverage. Function and method
+documentation should remain detailed enough to cover every signature field.
+
+### Function-signature coverage
+
+For every consumer-visible function, method, constructor, callback, command handler, or other
+callable, document the signature's contract at the declaration. Cover each parameter individually and
+the return value; a function summary, parameter name, or type annotation is not enough. Explain each
+parameter's role, accepted shape or constraints, optionality/nullability, default, units,
+ownership/mutability, and cancellation or timing behavior when applicable. Explain the return value's
+meaning and shape, identity/ownership, synchronous or asynchronous behavior, side effects, ordering,
+and failure or rejected-input behavior. Record overload-specific differences and generic relationships.
+
+When structured tags are supported, use one unique entry per parameter, return value, and thrown error,
+and put the complete English and localized descriptions together in that entry. Keep the parameter
+names, tag names, and type tokens unchanged. For languages without structured tags, use the established
+docstring parameter/returns/raises sections or the nearest equivalent; do not omit the contract merely
+because the syntax differs.
+
+For example, a TypeScript callable should describe every signature field rather than only its summary:
+
+```ts
+/**
+ * Sends a request using the supplied retry policy.
+ *
+ * 使用给定的重试策略发送请求。
+ *
+ * @param url Request URL; must use an allowed HTTPS origin.
+ *
+ *   请求 URL；必须使用允许的 HTTPS 来源。
+ * @param options Retry limits and delays. Omit to use the defaults.
+ *
+ *   重试次数和延迟配置。省略时使用默认值。
+ * @returns The parsed response body; the promise rejects on transport or validation failure.
+ *
+ *   解析后的响应正文；传输或校验失败时 promise 会拒绝。
+ */
+async function sendRequest(url: string, options?: RetryOptions): Promise<unknown> {
+  // ...
+}
+```
+
+Do not merely repeat `url: string` or `Promise<unknown>`; the descriptions above explain constraints,
+defaults, result semantics, and failure behavior that the signature cannot express.
+
 ### File-level headers
 
 For every newly created or materially changed code-bearing file (source code, executable script,
@@ -120,6 +166,41 @@ SQL/configuration metadata. If a format cannot attach a description to a field, 
 the nearest authoritative schema/table/reference and link or synchronize it from the declaration. Do
 not skip fields merely because they look self-explanatory; omit only genuinely private trivial fields
 under the repository convention.
+
+When a field/member's complete explanation fits on one line, use the language/tool's valid compact
+single-line form. Keep both language phrases in the same comment with a clear separator, for example:
+
+```ts
+interface UserOptions {
+  /** Display label shown in the UI — 在界面中显示的标签 */
+  label: string;
+}
+```
+
+The same idea uses different syntax outside TypeScript/JavaScript:
+
+```go
+type UserOptions struct {
+	// Display label shown in the UI — 在界面中显示的标签
+	Label string
+}
+```
+
+```rust
+struct UserOptions {
+    /// Display label shown in the UI — 在界面中显示的标签
+    label: String,
+}
+```
+
+```python
+@dataclass
+class UserOptions:
+    label: str  # Display label shown in the UI — 在界面中显示的标签
+```
+
+Do not use `/** ... */` in a language that does not support it. Expand the comment to a multiline
+bilingual block whenever constraints, defaults, relationships, or other details do not fit.
 
 For example, each TypeScript property gets its own bilingual block rather than relying on the interface
 comment:

@@ -119,7 +119,9 @@ can follow the surrounding convention directly.
   and the complete localized-language counterpart. Start the localized block directly; do not prefix it
   with a language label such as `Chinese:` or `中文：`. Keep both blocks inside the same comment or
   docstring delimiters; do not create a second adjacent comment for the localized text. Do not interleave
-  languages sentence by sentence; keep the two complete blocks adjacent so they cannot drift.
+  languages sentence by sentence; keep the two complete blocks adjacent so they cannot drift. A concise
+  field/member comment may use the single-line form described below when both language phrases fit;
+  this is a formatting exception, not a reduction in semantic coverage.
 - Treat translation as a fidelity check, not a second authoring pass. Compare the two blocks for
   omissions, additions, changed negation or modality, altered conditions, and inconsistent terminology;
   when the English source is ambiguous, flag or ask rather than silently resolving it in translation.
@@ -136,6 +138,16 @@ can follow the surrounding convention directly.
   role changes; do not turn it into a changelog or repeat every symbol's documentation. Use the module
   docstring or the language/tool's nearest file-comment form, and keep both language blocks in the same
   header. Skip generated/vendor files and files whose repository convention explicitly forbids headers.
+- **Document callable signatures in detail.** For every consumer-visible function, method, constructor,
+  callback, command handler, or other callable, document each parameter and the return value at the
+  signature location; a summary, parameter name, or type annotation alone is insufficient. For each
+  parameter, explain its semantic role, accepted shape or constraints, optionality/nullability, default,
+  units, ownership/mutability, and cancellation or timing behavior when applicable. Explain the return
+  value's meaning and shape, identity/ownership, sync or async behavior, side effects, ordering, and
+  failure or rejected-input behavior. Use one unique structured entry per parameter, return, and thrown
+  error when the language/tool supports tags; keep the English and localized descriptions together in
+  each entry. Cover overload-specific differences, generic relationships, and non-obvious private
+  callables as well.
 - **Document structured members individually.** For every consumer-visible structured declaration—such
   as a TypeScript `interface` or object type, class/record/dataclass/struct, enum-like object, options or
   configuration object, serialized payload, or schema—treat each field, property, member, and key as a
@@ -149,6 +161,12 @@ can follow the surrounding convention directly.
   schema/metadata/documentation surface and keep it synchronized. Apply the same rule outside
   TypeScript (for example Python dataclass attributes, Go/Rust struct fields, Java/Kotlin/C# properties,
   and OpenAPI/JSON Schema/protobuf/SQL definitions).
+- When a field/member's complete explanation fits on one line, a compact single-line comment is allowed,
+  using the language/tool's valid form—for example TypeScript/JavaScript `/** English — localized */`,
+  Go `// English — localized`, Rust `/// English — localized`, or a Python `# English — localized`
+  field comment/metadata entry. Keep both language phrases in the same comment with a clear separator;
+  do not use `/** ... */` in a language that does not support it. Expand to a multiline bilingual block
+  whenever the field needs constraints, defaults, relationships, or other detail that will not fit.
 - Cover the whole relevant implementation, not only exported functions. For every consumer-visible code
   element—not only functions, but also classes, methods, constructors,
   fields, properties, types, enum variants, events, commands, configuration keys, schemas, and state
@@ -223,6 +241,8 @@ Before reporting completion, verify that:
   inputs, fields, variants, outputs, defaults, failures, lifecycle, side effects, and constraints;
 - every consumer-visible field, property, member, or schema key has a field-level description (or the
   nearest supported equivalent), rather than relying only on its containing type or signature;
+- every consumer-visible callable has detailed documentation for each parameter, return value, and
+  applicable failure/throw behavior, rather than only a function summary or type signature;
 - every newly created or materially changed code-bearing file has a concise bilingual header describing
   its responsibility and boundary, unless it is generated/vendor code or the repository forbids headers;
 - every changed explanatory comment and human-facing documentation surface exists in English followed
