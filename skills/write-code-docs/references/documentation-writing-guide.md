@@ -70,6 +70,46 @@ next to the smallest block that needs it and explain why the code is shaped that
 wrappers, direct assignments, and obvious control flow. Run a coverage pass over exported and private
 symbols, followed by a complexity pass over implementation bodies.
 
+### Field-level coverage for structured data
+
+For a consumer-visible interface, object type, record, dataclass, struct, class property set, enum-like
+object, configuration/options object, serialized payload, or schema, document every field, property,
+member, or key at its declaration. A type-level summary is useful context but is not field documentation; neither
+the field name nor its type alone explains the contract. For each field whose meaning is part of the
+consumer contract, state the semantic role and, when applicable, optionality or nullability, default,
+units, valid range, ownership/mutability, serialization or omission behavior, lifecycle, compatibility,
+and relationships or constraints involving other fields. Apply the same pass recursively to nested
+consumer-visible objects.
+
+Use the language or documentation tool's closest supported field-level form: inline JSDoc/TSDoc above a
+TypeScript property, an attribute/docstring on a Python dataclass, a Go/Rust struct-field comment, a
+Java/Kotlin/C# property or record-component comment, or a description in OpenAPI/JSON Schema/protobuf/
+SQL/configuration metadata. If a format cannot attach a description to a field, document the fields in
+the nearest authoritative schema/table/reference and link or synchronize it from the declaration. Do
+not skip fields merely because they look self-explanatory; omit only genuinely private trivial fields
+under the repository convention.
+
+For example, each TypeScript property gets its own bilingual block rather than relying on the interface
+comment:
+
+```ts
+interface RetryOptions {
+  /**
+   * Maximum number of attempts, including the initial call. Must be at least 1; defaults to 3.
+   *
+   * 最大尝试次数，包括首次调用。必须至少为 1；默认值为 3。
+   */
+  maxAttempts?: number;
+
+  /**
+   * Delay between attempts in milliseconds. A value of 0 retries immediately.
+   *
+   * 重试之间的延迟，单位为毫秒。值为 0 时立即重试。
+   */
+  delayMs?: number;
+}
+```
+
 Use the project's established syntax. Structured tags supplied by a language or tool (such as JSDoc or
 TSDoc) are delivery aids, not the source of truth. Keep structured fields unique; in each field's
 description, put the English text first, then one blank line, then the localized-language text without

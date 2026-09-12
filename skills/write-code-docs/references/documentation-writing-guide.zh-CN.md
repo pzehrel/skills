@@ -51,6 +51,38 @@ docstring 块中写本地化语言的完整对应版本。本地化语言块直�
 不显然的常量、同步或重试逻辑以及清理路径添加注释。将注释放在需要解释的最小代码块旁边，并说明代码为何采用这种形态。跳过简单包装器、
 直接赋值和显然的控制流。先对导出符号和私有符号执行覆盖检查，再对实现主体执行复杂度检查。
 
+### 结构化数据的字段级覆盖
+
+对于消费者可见的 interface、对象类型、record、dataclass、struct、类属性集合、枚举式对象、配置/选项对象、序列化载荷或 schema，
+要在声明处记录每个字段/属性/成员/键。类型级摘要可以提供上下文，但不能代替字段文档；字段名和类型本身都无法完整表达契约。
+对于语义属于消费者契约的每个字段，说明其语义角色，并在适用时说明可选性或可空性、默认值、单位、有效范围、所有权/可变性、
+序列化或省略行为、生命周期、兼容性，以及涉及其他字段的关系或约束。对消费者可见的嵌套对象也要递归执行同样的检查。
+
+使用语言或文档工具最接近的字段级形式：TypeScript 属性上方的内联 JSDoc/TSDoc、Python dataclass 的属性注释/docstring、Go/Rust
+struct 字段注释、Java/Kotlin/C# 属性或 record 组件注释，或 OpenAPI/JSON Schema/protobuf/SQL/配置元数据中的 description。如果格式
+无法将描述附加到字段，就在最近的权威 schema/表格/参考文档中记录字段，并从声明处链接或保持同步。不要因为字段看起来不言自明就跳过；
+只有遵循仓库约定的真正私有简单字段才可省略。
+
+例如，每个 TypeScript 属性都应有自己的双语块，而不能只依赖 interface 注释：
+
+```ts
+interface RetryOptions {
+  /**
+   * Maximum number of attempts, including the initial call. Must be at least 1; defaults to 3.
+   *
+   * 最大尝试次数，包括首次调用。必须至少为 1；默认值为 3。
+   */
+  maxAttempts?: number;
+
+  /**
+   * Delay between attempts in milliseconds. A value of 0 retries immediately.
+   *
+   * 重试之间的延迟，单位为毫秒。值为 0 时立即重试。
+   */
+  delayMs?: number;
+}
+```
+
 使用项目已有语法。语言或工具提供的结构化标签（例如 JSDoc 或 TSDoc）只是承载手段，不是事实来源。结构化字段只
 保留一份；每个字段描述先写英语，空一行后再写不带语言标签的本地化语言。确保忽略这些标签后正文仍完整。不要只复述类型或签名。
 

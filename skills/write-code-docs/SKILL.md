@@ -1,6 +1,6 @@
 ---
 name: write-code-docs
-description: Add or review behavior-accurate bilingual comments and docstrings during implementation, refactoring, bug fixes, and code review, including private or internal symbols and complex logic. Also maintain localized Markdown or API docs with synchronized examples; use when code changes need explanatory documentation, not for API design alone.
+description: Add or review behavior-accurate bilingual comments and docstrings during implementation, refactoring, bug fixes, and code review, including field/member documentation for interfaces, records, schemas, private or internal symbols, and complex logic. Also maintain localized Markdown or API docs with synchronized examples; use when code changes need explanatory documentation, not for API design alone.
 license: MIT
 metadata:
   author: "Pzehrel <author@example.com>"
@@ -128,6 +128,19 @@ can follow the surrounding convention directly.
   a non-obvious choice.
 - Keep comments attached to the declaration or code they describe. Prefer one authoritative comment
   over repeated copies; link to deeper documentation when the explanation is large.
+- **Document structured members individually.** For every consumer-visible structured declaration—such
+  as a TypeScript `interface` or object type, class/record/dataclass/struct, enum-like object, options or
+  configuration object, serialized payload, or schema—treat each field, property, member, and key as a
+  separate documentation target. Add a field-level comment or the language/tool's equivalent directly
+  at the declaration; a comment on the containing type, a descriptive name, or a type annotation does
+  not replace it. Cover the field's semantic role, optionality/nullability, default, units and valid
+  range, ownership/mutability, serialization or omission rules, lifecycle, compatibility, and related
+  fields whenever those facts apply. For nested consumer-visible objects, repeat the pass for their
+  fields. Only omit a field when it is genuinely private and trivial under the repository convention,
+  or when the language cannot attach a field description; in the latter case use the nearest supported
+  schema/metadata/documentation surface and keep it synchronized. Apply the same rule outside
+  TypeScript (for example Python dataclass attributes, Go/Rust struct fields, Java/Kotlin/C# properties,
+  and OpenAPI/JSON Schema/protobuf/SQL definitions).
 - Cover the whole relevant implementation, not only exported functions. For every consumer-visible code
   element—not only functions, but also classes, methods, constructors,
   fields, properties, types, enum variants, events, commands, configuration keys, schemas, and state
@@ -200,6 +213,8 @@ Before reporting completion, verify that:
   remains in one file;
 - every consumer-visible declaration or structured element has semantic coverage for its applicable
   inputs, fields, variants, outputs, defaults, failures, lifecycle, side effects, and constraints;
+- every consumer-visible field, property, member, or schema key has a field-level description (or the
+  nearest supported equivalent), rather than relying only on its containing type or signature;
 - every changed explanatory comment and human-facing documentation surface exists in English followed
   by the inferred localized language, with the repository-defined pairing; and
 - every bilingual code comment keeps both language blocks inside one comment or docstring block rather
