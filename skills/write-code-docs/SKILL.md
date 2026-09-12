@@ -1,6 +1,6 @@
 ---
 name: write-code-docs
-description: Add or review behavior-accurate bilingual comments and docstrings during implementation, refactoring, bug fixes, and code review, including field/member documentation for interfaces, records, schemas, private or internal symbols, and complex logic. Also maintain localized Markdown or API docs with synchronized examples; use when code changes need explanatory documentation, not for API design alone.
+description: Add or review behavior-accurate bilingual comments and docstrings during implementation, refactoring, bug fixes, and code review, including file-level headers, field/member documentation for interfaces, records and schemas, private or internal symbols, and complex logic. Also maintain localized Markdown or API docs with synchronized examples; use when code changes need explanatory documentation, not for API design alone.
 license: MIT
 metadata:
   author: "Pzehrel <author@example.com>"
@@ -128,6 +128,14 @@ can follow the surrounding convention directly.
   a non-obvious choice.
 - Keep comments attached to the declaration or code they describe. Prefer one authoritative comment
   over repeated copies; link to deeper documentation when the explanation is large.
+- **Add a file-level header for code-bearing files.** When creating or materially changing a source,
+  executable script, configuration, or schema file, place one concise bilingual header comment at the
+  top of the file, before imports or declarations (after a required shebang, encoding marker, or license
+  header). State the file's responsibility, scope boundary, and—when not obvious—the main inputs,
+  outputs, integration, side effects, or invariants. Keep the header stable and update it when the file's
+  role changes; do not turn it into a changelog or repeat every symbol's documentation. Use the module
+  docstring or the language/tool's nearest file-comment form, and keep both language blocks in the same
+  header. Skip generated/vendor files and files whose repository convention explicitly forbids headers.
 - **Document structured members individually.** For every consumer-visible structured declaration—such
   as a TypeScript `interface` or object type, class/record/dataclass/struct, enum-like object, options or
   configuration object, serialized payload, or schema—treat each field, property, member, and key as a
@@ -215,6 +223,8 @@ Before reporting completion, verify that:
   inputs, fields, variants, outputs, defaults, failures, lifecycle, side effects, and constraints;
 - every consumer-visible field, property, member, or schema key has a field-level description (or the
   nearest supported equivalent), rather than relying only on its containing type or signature;
+- every newly created or materially changed code-bearing file has a concise bilingual header describing
+  its responsibility and boundary, unless it is generated/vendor code or the repository forbids headers;
 - every changed explanatory comment and human-facing documentation surface exists in English followed
   by the inferred localized language, with the repository-defined pairing; and
 - every bilingual code comment keeps both language blocks inside one comment or docstring block rather

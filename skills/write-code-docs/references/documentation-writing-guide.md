@@ -52,6 +52,38 @@ counterpart inside the same comment or docstring block. Start the localized bloc
 language label such as `Chinese:` or `中文：`. Do not split the two languages across adjacent comment
 blocks, and do not interleave sentences from the two languages.
 
+### File-level headers
+
+For every newly created or materially changed code-bearing file (source code, executable script,
+configuration, or schema), add one concise bilingual header at the top of the file. Place it before
+imports and declarations, but after syntax-required lines such as a shebang or encoding marker and
+after a repository-required license header. The header should tell a maintainer:
+
+- what responsibility the file owns and what it deliberately does not own;
+- the primary inputs, outputs, integrations, or side effects when they are not obvious; and
+- a stable invariant or boundary that explains why the file exists, when applicable.
+
+Use the language's module docstring or nearest supported file-comment form. Keep the complete English
+block first, one blank line, and the complete localized block in the same comment/docstring. Keep the
+header short and durable: it is an orientation aid, not a changelog, symbol index, or duplicate API
+reference. Refresh it when the file's responsibility or boundary changes. Do not add headers to generated
+or vendor files, or where the repository convention explicitly forbids them; preserve required license,
+tool, and build directives exactly.
+
+For example, a TypeScript file can begin with a single JSDoc header before imports:
+
+```ts
+/**
+ * Coordinates retry policy construction and validation for outbound requests.
+ * This module does not perform requests or persist policy state.
+ *
+ * 负责构建和校验出站请求的重试策略。
+ * 本模块不执行请求，也不持久化策略状态。
+ */
+
+import { validate } from './validation';
+```
+
 A useful comment normally has a summary and, where applicable, explains:
 
 - the semantic role of every input, field, option, or variant;
