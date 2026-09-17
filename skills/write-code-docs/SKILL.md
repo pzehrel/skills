@@ -1,17 +1,15 @@
 ---
 name: write-code-docs
-description: Add or review behavior-accurate bilingual comments and docstrings during implementation, refactoring, bug fixes, and code review, including file-level headers, field/member documentation for interfaces, records and schemas, private or internal symbols, and complex logic. Also maintain localized Markdown or API docs with synchronized examples; use when code changes need explanatory documentation, not for API design alone.
+description: Write or review behavior-accurate code comments, docstrings, file headers, and per-member documentation for consumer-visible types, enums, configs, and schemas during implementation, refactoring, bug fixes, and code review, and keep standalone Markdown or API docs in sync. Use it proactively whenever behavior or an interface changes, even without a docs request; not for API design alone.
 license: MIT
 metadata:
-  author: "Pzehrel <author@example.com>"
+  author: "Pzehrel <pzehrel@gmail.com>"
   tags:
     - documentation
     - code-comments
-    - code-review
-    - implementation
-    - bilingual
+    - docstrings
     - markdown
-    - jsdoc
+    - bilingual
   repository: https://github.com/pzehrel/skills
 ---
 
@@ -19,26 +17,52 @@ metadata:
 
 ## Purpose
 
-Use this skill to document behavior, contracts, workflows, and operational constraints accurately in English and the repository's localized language, including non-obvious private code and complex implementation blocks.
+Use this skill to document behavior, contracts, workflows, and operational constraints accurately in the language selected by the repository, and to cover private code and implementation blocks whose reason the code does not show.
 
-## Instructions
+## When to apply
 
-1. Inspect the authoritative source, repository language convention, and affected documentation surface.
-2. Write complete English content followed by a semantically equivalent localized counterpart.
-3. Keep Markdown language files separate, preserve canonical identifiers, and validate every claim and link.
-4. Run applicable checks or perform a focused source review when automation is unavailable.
+Apply this skill proactively whenever a coding task creates or changes behavior, a public or
+consumer-visible declaration, a non-obvious implementation block, a source/config/schema file, or a
+human-facing Markdown/API document—even if the request does not say “docs” or “comment.” Do not wait for
+those words.
 
-## When to Apply During Coding
-
-Apply this skill proactively when implementing, refactoring, debugging, or reviewing code that adds or
-changes behavior. Do not wait for the request to contain words such as “document,” “comment,” or “docs.”
-After understanding the code change, document the affected public and private symbols and any complex
-implementation blocks that a future maintainer would need to understand. For a trivial change whose
+After understanding the code change, document the affected public and private symbols and any
+implementation block whose reason the code does not show. For a trivial change whose
 purpose and effects are already obvious, do not add commentary solely because this skill was selected.
+
+## Language policy
+
+The effective `AGENTS.md` is the single authority for the natural language and for bilingual mode, and it may set them independently for code comments/docstrings and for Markdown/API documents. Read it before writing.
+
+- When the rule for the current artifact explicitly requires bilingual content, write English plus exactly one localized language.
+- When that rule is silent, write one language only, following the surrounding file or repository convention.
+- Do not infer bilingual mode from the user's language, the existence of localized files, or this skill's own translations.
+- Identify the localized language from repository instructions, existing counterparts, localization configuration, and the user's request. Do not assume Chinese, the user's language, or any other default; if the evidence does not identify it, ask before writing.
+- When bilingual mode is enabled, English comes first and the localized block is a complete, faithful translation that preserves claims, modality, conditions, examples, and emphasis; natural grammar is allowed only when technical meaning stays unchanged.
+
+Keep the two artifact modes distinct:
+
+- **Code comments and docstrings:** in monolingual mode, use one complete block in the selected language. In bilingual mode, place the complete English block, one blank line, and its complete localized translation inside one comment or docstring block at the same code location. Do not split bilingual text across adjacent comment blocks.
+- **Markdown documents:** keep each standalone page independent; in monolingual mode, use one file in the selected language; in bilingual mode, keep complete English and localized prose in separate paired files such as `README.md` and `README.zh-CN.md`. Do not alternate languages paragraph by paragraph or duplicate tables/code blocks in one file unless explicitly required.
+
+## Workflow
+
+1. **Settle the language setting.** Read the effective `AGENTS.md` (normally already in the Agent context) and apply the Language policy section, separately for code comments/docstrings and for Markdown/API documents.
+2. **Inspect before writing.** Read the nearest existing documentation with the same audience and purpose. Identify the behavior or workflow that changed, the authoritative source (code, types, tests, configuration, or command output), the intended reader, and the smallest documentation surface to change. Classify each target as an in-code comment/docstring or a standalone Markdown document.
+3. **Read the file matching the work.** For code, read [code-comments.md](references/code-comments.md), then exactly one syntax example: [block docs (`/** ... */`)](references/comment-syntax-block.md) for TypeScript/JavaScript/Java, [Rustdoc (`//!`/`///`)](references/comment-syntax-rustdoc.md) for Rust, [Python docstrings/comments](references/comment-syntax-python.md) for Python, or [markup comments (`<!-- ... -->`)](references/comment-syntax-markup.md) for HTML/XML. For Markdown/API-only work, read [markdown-docs.md](references/markdown-docs.md). A change that adds or changes a command-line flag, environment variable, configuration key, or error code also updates the Markdown surface that lists it, so read `markdown-docs.md` for that part even when the main work is code. For mixed-language files, read each matching syntax example.
+4. **Write alongside the change.** Implement or edit and document in the same change; do not postpone it to a separate pass. Meet the minimum deliverable of whichever artifact you touched: [code-comments.md](references/code-comments.md) for code, [markdown-docs.md](references/markdown-docs.md) for Markdown/API documents. Check existing names, links, terminology, examples, version scope, and deprecation policy, preserve unrelated edits, and do not duplicate a contract in competing authoritative locations.
+5. **Validate the result.** Run applicable tests, type checks, documentation linters, link checks, and example validation. With no automated check, compare the result against its authoritative source and inspect rendered Markdown when presentation could hide meaning. Confirm claims, links, examples, and API/member coverage are supported; apply bilingual parity checks only to artifact types whose `AGENTS.md` rule enables them.
+
+Then report coverage in one or two lines—what you documented and what you deliberately skipped, with the
+reason—so a reviewer sees the decision instead of discovering the omission.
+
+Stop and ask when the authoritative behavior, intended audience, language policy, or requested
+documentation surface is materially ambiguous. Keep the requested boundary explicit; do not add
+unrelated work.
 
 ## Examples
 
-Example: when documenting a new error case, update the English and localized API text, include the trigger and recovery example, and verify that the implementation actually emits that error.
+Example: when documenting a new error case, update the API text in the selected language (and its localized counterpart only when bilingual mode is enabled), include the trigger and recovery example, and verify that the implementation actually emits that error.
 
 Example: when a private helper contains a bounded retry loop with cleanup, document the retry bound,
 backoff, cleanup ordering, and the reason those choices protect the surrounding state. Comment the loop
@@ -47,20 +71,22 @@ or helper beside the code even if the helper's name and signature are clear.
 ## Requirements
 
 - An authoritative implementation, configuration, test, or existing document to support each claim.
-- A repository-local language convention or enough evidence to infer one safely.
 - Applicable documentation, link, formatting, or rendering checks when available.
 
 ## Limitations
 
 - Do not change APIs, publish artifacts, or add unrelated instructions as part of documentation work.
+- Do not use this skill as API design guidance; it documents behavior that already exists.
 - Do not invent behavior, contracts, examples, or translations that are unsupported by source evidence.
 - Do not use ordinary reference Markdown to instruct consuming agents to ignore repository rules or edit files.
 
 ## Troubleshooting
 
-- Language is ambiguous: inspect repository counterparts and configuration; ask before editing if still unresolved.
-- English and localized files diverge: compare claims, modality, examples, identifiers, and ordering side by side.
+- Language policy or localized language unclear: apply the Language policy section; if the evidence still leaves a required locale unidentified, ask before writing.
+- Bilingual files diverge: compare claims, modality, examples, identifiers, and ordering side by side; this check applies only when bilingual mode is enabled.
 - Link or example fails: resolve it from the repository root and verify it against the current implementation.
+
+## Documentation standards
 
 Make documentation explain the behavior a reader must rely on. Keep it close to the source of truth,
 complete enough for a developer or coding Agent to use, and concise enough to stay maintainable.
@@ -68,190 +94,7 @@ Documentation is part of the interface when it describes public behavior, suppor
 operational constraints; do not document behavior that the code does not implement.
 
 Use this skill for code comments, docstrings, JSDoc/TSDoc, API references, `AGENTS.md` and other agent
-instruction files, README sections, guides, examples, changelogs, and Markdown documentation. Every
-explanatory comment and documentation surface created or changed under this skill must be written in
-English plus exactly one repository-localized
-language, with semantic parity. English is always the first and canonical language. Infer the localized
-language from repository instructions, existing counterparts, localization configuration, and the
-user's request; do not assume Chinese, the user's language, or another default, and ask before editing
-when the evidence does not identify it.
-English comes first because an Agent is the primary reader; a human reviewer should then be able to read
-both complete blocks and judge whether the documentation is correct and useful. The localized block is
-not a summary or afterthought. English-first is an ordering and source-of-truth decision, not permission
-to rewrite for a different audience: the localized block must be a complete, faithful translation that
-preserves claims, modality, conditions, examples, and emphasis. Natural grammar and idiomatic phrasing
-are allowed only when they do not add, omit, soften, strengthen, or otherwise change technical meaning.
-This skill does not authorize publishing, changing APIs, or adding unrelated instructions.
+instruction files, README sections, guides, examples, changelogs, and Markdown documentation.
 
-Keep the two artifact modes distinct:
-
-- **Code comments and docstrings:** place the complete English block, one blank line, and its complete
-  localized translation inside one comment or docstring block at the same code location. Start the
-  localized block directly without a language label. Do not split the two languages across adjacent
-  `/** ... */` or `/* ... */` blocks.
-- **Markdown documents:** keep English and localized prose in separate complete files by default. Use
-  the repository's locale naming or directory convention, such as `README.md` plus
-  `README.zh-CN.md`. Do not alternate languages paragraph by paragraph, duplicate tables, or repeat
-  code blocks inside one Markdown file unless the repository or user explicitly requires an inline
-  bilingual document.
-
-## Inspect before writing
-
-1. Read the effective repository instructions and the nearest existing documentation with the same
-   audience and purpose.
-2. Determine the behavior or workflow that changed, the authoritative source (code, types, tests,
-   configuration, or command output), the intended reader, and the smallest documentation surface
-   that should change.
-3. Classify each target as an in-code comment/docstring or a standalone Markdown document, then use
-   the corresponding bilingual layout above. Determine the repository's localized language before
-   writing; English remains the canonical first language. Check existing names, links, terminology,
-   examples, version scope, and deprecation policy.
-   Preserve unrelated edits and do not duplicate a contract in competing authoritative locations.
-
-For detailed comment and Markdown patterns, read
-[references/documentation-writing-guide.md](references/documentation-writing-guide.md) when adding a
-new documentation structure, auditing coverage, or resolving a style ambiguity. Small local edits
-can follow the surrounding convention directly.
-
-## Write useful code comments
-
-- Write every explanatory comment or docstring in a complete English block, followed by one blank line
-  and the complete localized-language counterpart. Start the localized block directly; do not prefix it
-  with a language label such as `Chinese:` or `中文：`. Keep both blocks inside the same comment or
-  docstring delimiters; do not create a second adjacent comment for the localized text. Do not interleave
-  languages sentence by sentence; keep the two complete blocks adjacent so they cannot drift. A concise
-  field/member comment may use the single-line form described below when both language phrases fit;
-  this is a formatting exception, not a reduction in semantic coverage.
-- Treat translation as a fidelity check, not a second authoring pass. Compare the two blocks for
-  omissions, additions, changed negation or modality, altered conditions, and inconsistent terminology;
-  when the English source is ambiguous, flag or ask rather than silently resolving it in translation.
-- Comment the semantic contract: purpose, preconditions, invariants, side effects, ordering,
-  ownership or lifetime, failure behavior, units, compatibility constraints, and the reason behind
-  a non-obvious choice.
-- Keep comments attached to the declaration or code they describe. Prefer one authoritative comment
-  over repeated copies; link to deeper documentation when the explanation is large.
-- **Add a file-level header for code-bearing files.** When creating or materially changing a source,
-  executable script, configuration, or schema file, place one concise bilingual header comment at the
-  top of the file, before imports or declarations (after a required shebang, encoding marker, or license
-  header). State the file's responsibility, scope boundary, and—when not obvious—the main inputs,
-  outputs, integration, side effects, or invariants. Keep the header stable and update it when the file's
-  role changes; do not turn it into a changelog or repeat every symbol's documentation. Use the module
-  docstring or the language/tool's nearest file-comment form, and keep both language blocks in the same
-  header. Skip generated/vendor files and files whose repository convention explicitly forbids headers.
-- **Document callable signatures in detail.** For every consumer-visible function, method, constructor,
-  callback, command handler, or other callable, document each parameter and the return value at the
-  signature location; a summary, parameter name, or type annotation alone is insufficient. For each
-  parameter, explain its semantic role, accepted shape or constraints, optionality/nullability, default,
-  units, ownership/mutability, and cancellation or timing behavior when applicable. Explain the return
-  value's meaning and shape, identity/ownership, sync or async behavior, side effects, ordering, and
-  failure or rejected-input behavior. Use one unique structured entry per parameter, return, and thrown
-  error when the language/tool supports tags; keep the English and localized descriptions together in
-  each entry. Cover overload-specific differences, generic relationships, and non-obvious private
-  callables as well.
-- **Document structured members individually.** For every consumer-visible structured declaration—such
-  as a TypeScript `interface` or object type, class/record/dataclass/struct, enum-like object, options or
-  configuration object, serialized payload, or schema—treat each field, property, member, and key as a
-  separate documentation target. Add a field-level comment or the language/tool's equivalent directly
-  at the declaration; a comment on the containing type, a descriptive name, or a type annotation does
-  not replace it. Cover the field's semantic role, optionality/nullability, default, units and valid
-  range, ownership/mutability, serialization or omission rules, lifecycle, compatibility, and related
-  fields whenever those facts apply. For nested consumer-visible objects, repeat the pass for their
-  fields. Only omit a field when it is genuinely private and trivial under the repository convention,
-  or when the language cannot attach a field description; in the latter case use the nearest supported
-  schema/metadata/documentation surface and keep it synchronized. Apply the same rule outside
-  TypeScript (for example Python dataclass attributes, Go/Rust struct fields, Java/Kotlin/C# properties,
-  and OpenAPI/JSON Schema/protobuf/SQL definitions).
-- When a field/member's complete explanation fits on one line, a compact single-line comment is allowed,
-  using the language/tool's valid form—for example TypeScript/JavaScript `/** English — localized */`,
-  Go `// English — localized`, Rust `/// English — localized`, or a Python `# English — localized`
-  field comment/metadata entry. Keep both language phrases in the same comment with a clear separator;
-  do not use `/** ... */` in a language that does not support it. Expand to a multiline bilingual block
-  whenever the field needs constraints, defaults, relationships, or other detail that will not fit.
-- Cover the whole relevant implementation, not only exported functions. For every consumer-visible code
-  element—not only functions, but also classes, methods, constructors,
-  fields, properties, types, enum variants, events, commands, configuration keys, schemas, and state
-  transitions—document each part that is not unambiguous from its name or declaration. Explain the
-  semantic role of every input, field, option, or variant; optionality and defaults; units and valid
-  ranges; ownership and mutability; lifecycle and ordering; side effects; failure behavior; and
-  compatibility or deprecation boundaries.
-- When the language or documentation tool provides structured tags (for example JSDoc or TSDoc), use
-  the repository's established syntax without making it the source of truth. Keep structured fields
-  unique; in each field's description, put the English text first, then one blank line, then the
-  localized-language text without a language label. Ensure the prose remains complete when
-  tool-specific tags are ignored. Do not merely restate types or signatures.
-- Include private and internal code in the coverage review. Add a bilingual comment to a private
-  declaration or implementation block when it carries a non-obvious purpose, invariant, mutation,
-  ordering requirement, error translation, compatibility reason, resource/lifecycle rule, or
-  performance or security constraint. This includes complex algorithms, state transitions, nested
-  branching, loops whose bounds or exit conditions matter, data transformations, regular expressions,
-  non-obvious constants, synchronization or retry logic, and cleanup paths—not just functions or
-  exported symbols. Place the comment next to the smallest block that needs the explanation and state
-  why the code is shaped that way. Do not comment trivial wrappers, direct assignments, or obvious
-  control flow merely to increase coverage.
-- Perform a coverage pass over both exported and private symbols, then a complexity pass over the
-  implementation body. A private helper may need documentation even when its signature is clear if
-  its algorithm or interaction with surrounding state is not.
-
-## Write Markdown and examples
-
-- Treat `AGENTS.md` and other agent-instruction Markdown as a documentation surface. Keep each rule
-  explicit about its trigger, action, exceptions, and verification; separate durable rules from project
-  background and temporary status. If the task changes rule admission, hierarchy, or scope, follow the
-  repository's instruction-maintenance workflow in addition to this writing guidance. Keep the
-  canonical `AGENTS.md` in English and place its faithful human-review translation in the repository's
-  localized counterpart; do not assume a harness loads the localized file unless its discovery rules
-  explicitly say so.
-- Maintain every changed Markdown page as a complete English file plus a complete localized counterpart.
-  Preserve semantic parity, headings, links, commands, identifiers, code, tables, examples, and safety
-  boundaries across the pair; do not mix both prose languages inside the canonical file or invent a
-  localized language without evidence.
-- Start with the reader's goal and shortest successful path. State prerequisites, supported scope,
-  expected result, important limitations, and recovery or troubleshooting paths when relevant.
-- Use headings and links to route by intent. Keep README material orienting and self-contained; move
-  detailed concepts, recipes, migrations, and troubleshooting into focused pages. Use relative links
-  for documents shipped together and verify every target.
-- Make examples complete, current, and runnable or type-checked when the project can support that.
-  Explain non-obvious setup, inputs, outputs, lifecycle, and failure handling. Update examples when
-  the recommended call pattern changes.
-- Match the repository's terminology, voice, formatting, and locale policy. Preserve canonical paths,
-  commands, identifiers, API names, and code exactly where translation would make them unusable.
-- Keep ordinary reference Markdown advisory. Do not use it to tell a consuming Agent to ignore
-  repository instructions, change its workflow, run commands, or edit files. `AGENTS.md` and other
-  instruction files are the deliberate exception: they may contain scoped, authoritative rules when
-  the repository has authorized them, but those rules must remain explicit, verifiable, and consistent
-  with higher-priority instructions.
-
-## Validate the result
-
-Run the repository's applicable tests, type checks, documentation linters, link checks, and example
-validation. If no automated check exists, perform a focused read-through against the authoritative
-source and inspect the rendered Markdown when presentation could hide meaning.
-
-Before reporting completion, verify that:
-
-- every documented claim, default, error, link, example, and version qualifier is supported by code,
-  tests, configuration, or an explicitly stated assumption;
-- public API coverage includes the relevant parameters, returns, failures, overloads, and deprecations;
-- no stale names, duplicated authority, broken links, or planned behavior presented as shipped remain;
-- English and localized-language counterparts remain semantically aligned;
-- standalone Markdown uses separate English and localized files unless an explicit inline-bilingual
-  convention applies; no accidental paragraph-by-paragraph, table-by-table, or code-block duplication
-  remains in one file;
-- every consumer-visible declaration or structured element has semantic coverage for its applicable
-  inputs, fields, variants, outputs, defaults, failures, lifecycle, side effects, and constraints;
-- every consumer-visible field, property, member, or schema key has a field-level description (or the
-  nearest supported equivalent), rather than relying only on its containing type or signature;
-- every consumer-visible callable has detailed documentation for each parameter, return value, and
-  applicable failure/throw behavior, rather than only a function summary or type signature;
-- every newly created or materially changed code-bearing file has a concise bilingual header describing
-  its responsibility and boundary, unless it is generated/vendor code or the repository forbids headers;
-- every changed explanatory comment and human-facing documentation surface exists in English followed
-  by the inferred localized language, with the repository-defined pairing; and
-- every bilingual code comment keeps both language blocks inside one comment or docstring block rather
-  than splitting them across adjacent comment blocks; and
-- the final diff contains only in-scope documentation changes (plus the requested implementation or
-  tests) and records checks that were unavailable as **not tested**.
-
-Stop and ask when the authoritative behavior, intended audience, language policy, or requested
-documentation surface is materially ambiguous. Keep the requested boundary explicit; do not add
-unrelated work or rewrite history to make documentation appear complete.
+Keep each standalone Markdown page independently readable and reachable from a relevant index, guide,
+or parent document; do not leave a document with no inbound link.

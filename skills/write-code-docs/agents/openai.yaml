@@ -1,10 +1,10 @@
 interface:
   # 中文：编写代码文档
   display_name: "Write Code Documentation"
-  # 中文：在实现、重构、修复 bug 和代码审查中为文件头部、结构化字段、函数签名以及公共、私有和复杂代码编写双语注释和文档
-  short_description: "Write bilingual file headers, signature docs, and field comments"
-  # 中文：在编写、重构或审查代码时使用 $write-code-docs，为新建或实质性修改的代码文件添加简洁的双语头部，详细记录函数签名中的参数、返回值和失败行为，记录接口、记录和 schema 中每个消费者可见字段，并为公共、私有和复杂逻辑添加双语注释；同时维护 Agent 或 Markdown 文档，并从仓库证据确定本地化语言。
-  default_prompt: "Use $write-code-docs while implementing, refactoring, or reviewing code: add a concise bilingual header to each new or materially changed code-bearing file, document every callable's parameters, return value, and failure behavior, document every consumer-visible field in interfaces, records, and schemas, add bilingual comments for public, private, and complex logic, and maintain agent or Markdown docs; infer the localized language from repository evidence."
+  # 中文：为文件头部、函数签名以及每个消费者可见成员（类型字段、枚举成员、映射键、参数、schema 列、配置键、错误码）编写注释和文档，并遵循每种语言的独立示例文件
+  short_description: "Write file headers, signature docs, and per-member comments by language"
+  # 中文：在编写、重构或审查代码时使用 $write-code-docs，先阅读 SKILL.md，再根据上下文中的 AGENTS.md 确定自然语言和两类文档的双语设置，随后阅读注释编写规则与匹配注释语法的示例文件，最后边编码边补充注释，并报告记录了哪些、有意跳过了哪些；同时维护独立可读的 Markdown 文档。
+  default_prompt: "Use $write-code-docs proactively while implementing, refactoring, or reviewing code: trigger on behavior or documentation changes even without an explicit docs request, start with SKILL.md and use the AGENTS.md already in context to determine the natural language and independent bilingual settings for comments versus documents, then read code-comments.md followed by the matching comment-syntax example—block docs for TypeScript/JavaScript/Java, Rustdoc for Rust, Python docstrings/comments for Python, or markup comments for HTML/XML—and only then implement while writing or updating comments inline, finishing with one or two lines that report what you documented and what you deliberately skipped. For Markdown/API work, read markdown-docs.md and keep Markdown pages independently readable."
 
 policy:
   allow_implicit_invocation: true
