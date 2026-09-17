@@ -3,7 +3,7 @@ name: subagents-develop
 description: Orchestrate independent coding tasks with isolated Git branches and worktrees. Use when parallel or isolated development helps; main-branch merges require explicit authorization.
 license: MIT
 metadata:
-  author: "Pzehrel <author@example.com>"
+  author: "Pzehrel <pzehrel@gmail.com>"
   tags:
     - subagents
     - git

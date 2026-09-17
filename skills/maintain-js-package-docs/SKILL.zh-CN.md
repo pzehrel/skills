@@ -3,7 +3,7 @@ name: maintain-js-package-docs
 description: 维护可发布 JavaScript 或 TypeScript 包的 JSDoc 优先 API 文档、README、示例和随包文档。公共契约发生变化时使用；跳过仅限应用内部或私有模块的工作。
 license: MIT
 metadata:
-  author: "Pzehrel <author@example.com>"
+  author: "Pzehrel <pzehrel@gmail.com>"
   tags:
     - javascript
     - typescript

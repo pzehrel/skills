@@ -3,7 +3,7 @@ name: subagents-develop
 description: 使用隔离的 Git 分支和 worktree 编排独立编码任务。当并行或隔离开发有帮助时使用；合入主分支需要明确授权。
 license: MIT
 metadata:
-  author: "Pzehrel <author@example.com>"
+  author: "Pzehrel <pzehrel@gmail.com>"
   tags:
     - subagents
     - git

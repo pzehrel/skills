@@ -3,7 +3,7 @@ name: maintain-agents-md
 description: Create and audit scoped, verifiable AGENTS.md hierarchies and route durable rules into repository policy documents. Use for repository guidance; not for temporary notes.
 license: MIT
 metadata:
-  author: "Pzehrel <author@example.com>"
+  author: "Pzehrel <pzehrel@gmail.com>"
   tags:
     - agents-md
     - repository-guidance

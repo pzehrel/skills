@@ -4,7 +4,7 @@ description: Verify and edit EasyEDA schematics and PCBs, including connectivity
 license: MIT
 version: 1.0.0
 metadata:
-  author: "Pzehrel <author@example.com>"
+  author: "Pzehrel <pzehrel@gmail.com>"
   tags:
     - easyeda
     - electronics

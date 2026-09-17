@@ -4,7 +4,7 @@ description: 验证和编辑 EasyEDA 原理图与 PCB，包括连接、布局、
 license: MIT
 version: 1.0.0
 metadata:
-  author: "Pzehrel <author@example.com>"
+  author: "Pzehrel <pzehrel@gmail.com>"
   tags:
     - easyeda
     - electronics

@@ -3,7 +3,7 @@ name: maintain-agents-md
 description: 创建并审查范围明确、可验证的 AGENTS.md 层级，把持久规则路由到仓库策略文档。用于仓库说明维护；不适用于临时笔记。
 license: MIT
 metadata:
-  author: "Pzehrel <author@example.com>"
+  author: "Pzehrel <pzehrel@gmail.com>"
   tags:
     - agents-md
     - repository-guidance

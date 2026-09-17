@@ -3,7 +3,7 @@ name: maintain-js-package-docs
 description: Maintain JSDoc-first API docs, README, examples, and bundled docs for publishable JavaScript or TypeScript packages. Use when public contracts change; skip app-only or private modules.
 license: MIT
 metadata:
-  author: "Pzehrel <author@example.com>"
+  author: "Pzehrel <pzehrel@gmail.com>"
   tags:
     - javascript
     - typescript
