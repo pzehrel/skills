@@ -7,8 +7,9 @@ the function can panic.
 `///` is the form rustdoc and editor hover read; a `//` comment is not surfaced by either.
 
 In bilingual mode every comment below holds the complete English block, one blank line, and the complete
-localized block. The Monolingual mode section shows the same shapes in one language, where a simple
-comment stays on a single line.
+localized block, so the multi-line shape is inherent to that mode. Do not copy the shape into monolingual
+mode: there the single-line `///` is the default, and consecutive-line blocks are reserved for genuinely
+complex explanations.
 
 Form follows role. `///` documents an item, and rustdoc plus editor hover read it. Inside a function body
 it documents nothing: rustc reports `unused doc comment` for `///` on a statement and suggests `//`, which
@@ -97,8 +98,9 @@ pub enum RetryDecision {
 
 ## Monolingual mode
 
-When `AGENTS.md` is silent, write one language only; every field still gets its own comment, and a simple
-one stays on a single line:
+When `AGENTS.md` is silent, write one language only; every field still gets its own comment, and one line
+is the default form. A comment does not become complex just because it carries a unit, a default, or a
+second clause—`/// Expiry as Unix seconds; 0 means a session cookie.` stays on one line:
 
 ```rust
 /// Retry limits applied to one queue.
@@ -110,7 +112,23 @@ pub struct RetryConfig {
 }
 ```
 
+Expand to consecutive `///` lines only when the explanation is genuinely complex—several distinct facts
+that read better as separate paragraphs, `# Arguments`-style sections, or an example.
+
 ## Do not write
+
+The comment is monolingual and simple; splitting it into a summary line plus a detail paragraph imposes
+structure the content does not have. Write `/// Expiry as Unix seconds; 0 means a session cookie.` on one
+line:
+
+```rust
+pub struct SessionCookie {
+    /// Expiry as Unix seconds.
+    ///
+    /// `0` means a session cookie.
+    pub expires: i64,
+}
+```
 
 Only the first field is described, so the second is uncovered:
 

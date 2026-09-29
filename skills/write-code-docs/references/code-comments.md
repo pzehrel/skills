@@ -25,6 +25,13 @@ A comment that only restates the declaration does not satisfy this; see Comment 
 ## Comment layout
 
 - Keep every explanatory comment or docstring in one complete block in the selected language.
+- In monolingual mode, one line is the default form for a comment or docstring—
+  `/** Per-request chunk ceiling in bytes. */`. Expand to a multi-line block only when the explanation is
+  genuinely complex: several distinct facts that read better as separate paragraphs (a summary plus
+  constraints, relationships, or failure behavior), structured signature tags, or an example. A sentence
+  is not complex just because it carries a unit, a default, or a second clause—
+  `/** Expiry as Unix seconds; 0 means a session cookie. */` stays on one line. In bilingual mode the
+  multi-line block is inherent, because it holds two complete language blocks.
 - Match the form to the reader. Use the doc-comment form for what a consumer reads from editor hover or
   generated docs—`/** ... */` for TypeScript/JavaScript/Java, `///` for Rust, an attribute docstring for
   Python. Use the ordinary line-comment form for implementation reasoning inside a function or method
@@ -101,17 +108,24 @@ declaration does not carry it, and state the unit whenever the type alone does n
 attribute, so put one description per attribute in the owning JSON Schema, OpenAPI, or XSD document; that
 is where the per-member requirement is satisfied.
 
+An inline closed set—a string-literal union such as `sameSite?: 'Strict' | 'Lax' | 'None'`, or a Python
+`Literal` type—has no per-value declaration site, so the field's own comment must enumerate what every
+value means; do not stop at the field's overall role. Keep the enumeration on one line when each gloss is
+terse (`/** Mode: fast = skip checks, full = run all. */`), and expand to a one-line-per-value list when
+each value needs a real explanation. That enumeration is a genuinely complex comment and justifies the
+multi-line block.
+
 Use the form the editor can read. Document a field or member with the language's doc-comment form rather
 than a trailing line comment, because only the doc-comment form reaches editor hover: `/** ... */` for
 TypeScript/JavaScript/Java, `///` for Rust, and an attribute docstring—a string literal on the line after
 the assignment—for Python. A trailing `//`, `#`, or inline type comment is invisible to hover and does not
 satisfy this coverage.
 
-Keep a comment on one line only in monolingual mode, when the explanation is simple—for example
-`/** Per-request chunk ceiling in bytes. */`. In bilingual mode always use the complete English block, one
-blank line, and the complete localized block inside the same comment; do not compress both languages onto
-one line with a separator. Expand to a longer block when constraints, defaults, relationships, or other
-details do not fit. In markup,
+Member comments follow the Comment layout line-format rule: in monolingual mode one line is the default,
+and a unit, a default, or a second clause alone does not make the comment complex. In bilingual mode
+always use the complete English block, one blank line, and the complete localized block inside the same
+comment; do not compress both languages onto one line with a separator, and do not copy the bilingual
+multi-line shape into monolingual mode. In markup,
 `<!-- ... -->` beside the element is the only available form, and editor hover does not surface it; when a
 schema owns the constraint, document it in the schema instead.
 

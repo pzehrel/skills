@@ -4,7 +4,7 @@
 
 `///` 是 rustdoc 和编辑器悬停能读取的形式；`//` 注释两者都不会展示。
 
-双语模式下，下面每条注释都包含完整英语块、一个空行和完整本地化块。「单语模式」一节展示同样形态的单语写法：该模式下简单的注释保持一行。
+双语模式下，下面每条注释都包含完整英语块、一个空行和完整本地化块，多行形态是该模式固有的。不要把这种形态照搬到单语模式：单语下单行 `///` 是默认形态，连续多行只留给确实复杂的说明。
 
 形式取决于职责。`///` 用于项目文档，rustdoc 与编辑器悬停都会读取它。放进函数体则什么也不记录：对语句使用 `///` 时 rustc 会报 `unused doc comment` 并建议改用 `//`，下面所有函数体内的说明都用这种形式。
 
@@ -90,19 +90,32 @@ pub enum RetryDecision {
 
 ## 单语模式
 
-`AGENTS.md` 未说明时只写一种语言；每个字段仍然要有自己的注释，简单的注释保持一行：
+`AGENTS.md` 未说明时只写一种语言；每个字段仍然要有自己的注释，单行是默认形态。注释不会因为带单位、默认值或第二个分句就变复杂——`/// 过期时间的 Unix 秒级时间戳；0 表示会话 Cookie。` 保持一行：
 
 ```rust
-/// Retry limits applied to one queue.
+/// 应用于单个队列的重试限制。
 pub struct RetryConfig {
-    /// Maximum attempts per item, including the first.
+    /// 每个条目的最大尝试次数（含首次）。
     pub max_attempts: u8,
-    /// Fraction of the delay that is randomized, so replicas do not retry in lockstep.
+    /// 延迟中被随机化的比例，避免各副本同步重试。
     pub jitter_ratio: f32,
 }
 ```
 
+只有说明确实复杂——包含更适合分段呈现的多个独立事实、`# Arguments` 式章节或示例——才扩展为连续多行 `///`。
+
 ## 不要这样写
+
+注释是单语且简单的；拆成摘要行加正文段，是给内容套上它并不具备的结构。应写成一行 `/// 过期时间的 Unix 秒级时间戳；0 表示会话 Cookie。`：
+
+```rust
+pub struct SessionCookie {
+    /// 过期时间的 Unix 秒级时间戳。
+    ///
+    /// `0` 表示会话 Cookie。
+    pub expires: i64,
+}
+```
 
 只写了第一个字段，第二个没有覆盖：
 

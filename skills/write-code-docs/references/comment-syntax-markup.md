@@ -67,7 +67,8 @@ descriptions:
 
 ## Monolingual mode
 
-When `AGENTS.md` is silent, write one language only:
+When `AGENTS.md` is silent, write one language only, and keep each comment on one line unless it is
+genuinely complex:
 
 ```html
 <!-- Owns the request form and its submission state. -->

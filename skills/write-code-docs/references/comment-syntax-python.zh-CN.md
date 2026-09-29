@@ -4,7 +4,7 @@
 
 Python 没有 `/** ... */` 形式。attribute docstring——赋值语句下一行紧跟的字符串字面量——是工具能读取的字段形式；行尾 `#` 注释不会出现在编辑器悬停中。ruff 的 B018 显式豁免字符串字面量，因此这种写法不会触发无副作用表达式告警。Pylance 会为字段本身读取 attribute docstring，但尚未把它传播到生成的 `__init__` 参数上，因此悬停 dataclass 构造器时可能仍看不到说明。
 
-双语模式下，下面每条注释或 docstring 都包含完整英语块、一个空行和完整本地化块。「单语模式」一节展示同样形态的单语写法：该模式下简单的 docstring 保持一行。
+双语模式下，下面每条注释或 docstring 都包含完整英语块、一个空行和完整本地化块，多行形态是该模式固有的。不要把这种形态照搬到单语模式：单语下单行 docstring 是默认形态，多行 docstring 只留给确实复杂的说明。
 
 形式取决于职责。模块、类或函数 docstring 记录该对象，attribute docstring 记录字段。函数体内的代码说明使用 `#` 注释；下面函数体内的说明都用这种形式。
 
@@ -135,21 +135,33 @@ DELIVERY_MESSAGE: dict[DeliveryError, str] = {
 
 ## 单语模式
 
-`AGENTS.md` 未说明时只写一种语言。简单字段的 docstring 保持一行，但每个字段仍然要有自己的说明：
+`AGENTS.md` 未说明时只写一种语言。单行 docstring 是默认形态，但每个字段仍然要有自己的说明。docstring 不会因为带单位、默认值或第二个分句就变复杂——`"""过期时间的 Unix 秒级时间戳；0 表示会话 Cookie。"""` 保持一行：
 
 ```python
 @dataclass(frozen=True)
 class RetryConfig:
-    """Retry limits shared by every delivery in one queue."""
+    """同一队列中每次投递共用的重试限制。"""
 
     max_attempts: int
-    """Maximum attempts per item, including the first."""
+    """每个条目的最大尝试次数（含首次）。"""
 
     jitter_ratio: float
-    """Fraction of the delay that is randomized, so clients do not retry in lockstep."""
+    """延迟中被随机化的比例，避免客户端同步重试。"""
 ```
 
+只有说明确实复杂——包含更适合分段呈现的多个独立事实、`Args`/`Returns`/`Raises` 章节或示例——才扩展为多行 docstring。
+
 ## 不要这样写
+
+docstring 是单语且简单的；分段只增加了空行和引号行，没有增加结构。应写成一行 `"""过期时间的 Unix 秒级时间戳；0 表示会话 Cookie。"""`：
+
+```python
+expires: int
+"""过期时间的 Unix 秒级时间戳。
+
+0 表示会话 Cookie。
+"""
+```
 
 只写了第一个字段，第二个没有覆盖：
 

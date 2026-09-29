@@ -5,9 +5,10 @@ TypeScript and JavaScript share the same JSDoc tags; Java uses the same delimite
 different type syntax.
 
 In bilingual mode every comment below contains the complete English block, one blank line, and the
-complete localized block. The Monolingual mode section shows the same shapes in one language, where a
-simple comment stays on a single line. A one-line `/** English — 中文 */` comment is not used: the
-single-line form is reserved for monolingual mode.
+complete localized block, so the multi-line shape is inherent to that mode. Do not copy the shape into
+monolingual mode: there the single-line comment is the default, and a multi-line block is reserved for a
+genuinely complex explanation (see Monolingual mode). A one-line `/** English — 中文 */` comment is not
+used either: the single-line form is reserved for monolingual mode.
 
 Form follows role. `/** ... */` documents a declaration, which is what editor hover shows. Inside a
 function or method body, explain the code with ordinary `//` comments; every implementation note in the
@@ -231,8 +232,10 @@ const ERROR_MESSAGE: Record<string, string> = {
 
 ## Monolingual mode
 
-When the `AGENTS.md` rule is silent, write one language only. A simple type summary or field stays on a
-single line, and every field still carries its own description:
+When the `AGENTS.md` rule is silent, write one language only—the language the repository selected, which
+is not necessarily English. One line is the default form, and every field still carries its own
+description. A comment does not become complex just because it carries a unit, a default, or a second
+clause:
 
 ```ts
 /** Limits applied to one upload. */
@@ -244,7 +247,61 @@ interface UploadOptions {
 }
 ```
 
+The same holds when the selected language is Chinese or any other locale:
+
+```ts
+/** 登录后的 Amazon 会话 Cookie。 */
+export interface AmazonSessionCookie {
+  /** Cookie 名称。 */
+  readonly name: string
+  /** 过期时间的 Unix 秒级时间戳；0 表示会话 Cookie。 */
+  readonly expires: number
+  /**
+   * SameSite 策略；缺省表示浏览器未指定。
+   * - Strict：仅同站请求携带 Cookie。
+   * - Lax：跨站顶级导航也携带。
+   * - None：任何跨站请求都携带；要求 HTTPS。
+   */
+  readonly sameSite?: 'Strict' | 'Lax' | 'None'
+}
+```
+
+`sameSite` is the one field above that earns a multi-line block: its type is an inline string-literal
+union, and the comment enumerates what each value means—the several-distinct-facts case. When every
+value's gloss is terse, even a union field stays on one line, like
+`/** 模式：fast = 跳过检查，full = 全部执行。 */`.
+
+Expand to a multi-line block only when the explanation is genuinely complex—several distinct facts that
+read better as separate paragraphs (a summary plus constraints or failure behavior), structured tags, an
+example, or a per-value enumeration as above:
+
+```ts
+/**
+ * Mirrors the cookie jar the browser holds after a signed-in session.
+ *
+ * This object is persisted through `context.storageState()`, so every field must stay
+ * JSON-serializable; a `Date` or class instance silently breaks state round-trips.
+ */
+export interface AmazonSessionCookie { /* ... */ }
+```
+
 ## Do not write
+
+The comments are monolingual and simple, so the multi-line blocks are pure noise—two extra lines per
+field with no structure behind them. Write `/** Cookie 名称。 */` on one line instead:
+
+```ts
+export interface AmazonSessionCookie {
+  /**
+   * Cookie 名称。
+   */
+  readonly name: string
+  /**
+   * 过期时间的 Unix 秒级时间戳；0 表示会话 Cookie。
+   */
+  readonly expires: number
+}
+```
 
 Only the second field is described, so the first is uncovered:
 

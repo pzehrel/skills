@@ -61,7 +61,7 @@ HTML 和 XML 通常没有传统意义上的签名，而且标记语言无法把�
 
 ## 单语模式
 
-`AGENTS.md` 未说明时只写一种语言：
+`AGENTS.md` 未说明时只写一种语言；注释保持一行，除非内容确实复杂：
 
 ```html
 <!-- Owns the request form and its submission state. -->

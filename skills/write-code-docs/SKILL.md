@@ -42,7 +42,7 @@ The effective `AGENTS.md` is the single authority for the natural language and f
 
 Keep the two artifact modes distinct:
 
-- **Code comments and docstrings:** in monolingual mode, use one complete block in the selected language. In bilingual mode, place the complete English block, one blank line, and its complete localized translation inside one comment or docstring block at the same code location. Do not split bilingual text across adjacent comment blocks.
+- **Code comments and docstrings:** in monolingual mode, use one complete comment in the selected language, defaulting to a single line and expanding to a multi-line block only for a genuinely complex explanation. In bilingual mode, place the complete English block, one blank line, and its complete localized translation inside one comment or docstring block at the same code location. Do not split bilingual text across adjacent comment blocks.
 - **Markdown documents:** keep each standalone page independent; in monolingual mode, use one file in the selected language; in bilingual mode, keep complete English and localized prose in separate paired files such as `README.md` and `README.zh-CN.md`. Do not alternate languages paragraph by paragraph or duplicate tables/code blocks in one file unless explicitly required.
 
 ## Workflow

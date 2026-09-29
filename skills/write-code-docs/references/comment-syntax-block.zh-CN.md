@@ -2,7 +2,7 @@
 
 目标语言使用 `/** ... */` 块文档注释时阅读本文件。TypeScript 和 JavaScript 共用同一套 JSDoc 标签；Java 使用相同定界符，但标签与类型语法不同。
 
-双语模式下，下面每条注释都包含完整英语块、一个空行和完整本地化块。「单语模式」一节展示同样形态的单语写法：该模式下简单的注释保持一行。`/** English — 中文 */` 这种单行双语注释不使用，单行形式只留给单语模式。
+双语模式下，下面每条注释都包含完整英语块、一个空行和完整本地化块，多行形态是该模式固有的。不要把这种形态照搬到单语模式：单语下单行注释是默认形态，多行块只留给确实复杂的说明（见「单语模式」）。`/** English — 中文 */` 这种单行双语注释也不使用，单行形式只留给单语模式。
 
 形式取决于职责。`/** ... */` 用于声明文档，也就是编辑器悬停展示的内容。函数或方法体内的代码说明使用普通 `//` 注释；下面示例中的实现说明都用这种形式。
 
@@ -219,19 +219,67 @@ const ERROR_MESSAGE: Record<string, string> = {
 
 ## 单语模式
 
-`AGENTS.md` 规则未说明时只写一种语言。简单的类型摘要或字段注释保持一行，但每个字段仍然要有自己的说明：
+`AGENTS.md` 规则未说明时只写一种语言——即仓库选定的语言，不一定是中文。单行是默认形态，但每个字段仍然要有自己的说明。注释不会因为带单位、默认值或第二个分句就变复杂：
 
 ```ts
-/** Limits applied to one upload. */
+/** 单次上传的限制。 */
 interface UploadOptions {
-  /** Per-request chunk ceiling in bytes. */
+  /** 单次请求的分块上限（字节）。 */
   chunkSizeBytes: number;
-  /** Retries after the first failure; `0` disables retrying. */
+  /** 首次失败后的重试次数；`0` 表示不重试。 */
   maxRetries: number;
 }
 ```
 
+选定语言不是中文时同样适用，例如英语：
+
+```ts
+/** Amazon session cookies held after login. */
+export interface AmazonSessionCookie {
+  /** Cookie name. */
+  readonly name: string
+  /** Expiry as Unix seconds; 0 means a session cookie. */
+  readonly expires: number
+  /**
+   * SameSite policy; omitted means the browser did not specify one.
+   * - Strict: sent only on same-site requests.
+   * - Lax: also sent on cross-site top-level navigations.
+   * - None: sent on every cross-site request; requires HTTPS.
+   */
+  readonly sameSite?: 'Strict' | 'Lax' | 'None'
+}
+```
+
+`sameSite` 是上面唯一配得上多行块的字段：它的类型是内联字符串字面量联合，注释逐个列举了每个值的含义——即「多个独立事实」的情形。当每个值的释义都很简短时，联合类型字段同样保持一行，例如 `/** Mode: fast = skip checks, full = run all. */`。
+
+只有说明确实复杂——包含更适合分段呈现的多个独立事实（摘要加约束或失败行为）、结构化标签、示例，或上面的逐值列举——才扩展为多行块：
+
+```ts
+/**
+ * 登录会话后浏览器持有的 cookie 集合的镜像。
+ *
+ * 该对象会通过 `context.storageState()` 持久化，因此每个字段必须保持可 JSON 序列化；
+ * 使用 `Date` 或类实例会静默破坏状态往返。
+ */
+export interface AmazonSessionCookie { /* ... */ }
+```
+
 ## 不要这样写
+
+注释是单语且简单的，多行块只是噪音——每个字段多出两行，背后却没有任何结构。应写成一行 `/** Cookie 名称。 */`：
+
+```ts
+export interface AmazonSessionCookie {
+  /**
+   * Cookie 名称。
+   */
+  readonly name: string
+  /**
+   * 过期时间的 Unix 秒级时间戳；0 表示会话 Cookie。
+   */
+  readonly expires: number
+}
+```
 
 只写了第二个字段，第一个没有覆盖：
 

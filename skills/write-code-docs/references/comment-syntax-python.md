@@ -10,8 +10,9 @@ reads the attribute docstring for the field itself but does not yet propagate it
 generated `__init__`, so hovering the dataclass constructor may still show nothing.
 
 In bilingual mode every comment or docstring below holds the complete English block, one blank line, and
-the complete localized block. The Monolingual mode section shows the same shapes in one language, where a
-simple docstring stays on a single line.
+the complete localized block, so the multi-line shape is inherent to that mode. Do not copy the shape into
+monolingual mode: there the one-line docstring is the default, and a multi-line docstring is reserved for
+a genuinely complex explanation.
 
 Form follows role. A module, class, or function docstring documents that object, and an attribute
 docstring documents a field. Inside a function body, explain the code with `#` comments; every in-body
@@ -146,8 +147,9 @@ DELIVERY_MESSAGE: dict[DeliveryError, str] = {
 
 ## Monolingual mode
 
-When `AGENTS.md` is silent, write one language only. A simple field keeps its docstring on one line, and
-every field still gets one:
+When `AGENTS.md` is silent, write one language only. The one-line docstring is the default form, and
+every field still gets one. A docstring does not become complex just because it carries a unit, a
+default, or a second clause—`"""Expiry as Unix seconds; 0 means a session cookie."""` stays on one line:
 
 ```python
 @dataclass(frozen=True)
@@ -161,7 +163,21 @@ class RetryConfig:
     """Fraction of the delay that is randomized, so clients do not retry in lockstep."""
 ```
 
+Expand to a multi-line docstring only when the explanation is genuinely complex—several distinct facts
+that read better as separate paragraphs, `Args`/`Returns`/`Raises` sections, or an example.
+
 ## Do not write
+
+The docstring is monolingual and simple; the paragraph split adds blank lines and delimiters, not
+structure. Write `"""Expiry as Unix seconds; 0 means a session cookie."""` on one line:
+
+```python
+expires: int
+"""Expiry as Unix seconds.
+
+0 means a session cookie.
+"""
+```
 
 Only the first field is described, so the second is uncovered:
 
